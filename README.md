@@ -1,5 +1,7 @@
 # Incapsula SDK (v1 API Binding for PHP 7)
 
+[![PHP Composer](https://github.com/brettt89/incapsula-php/workflows/PHP%20Composer/badge.svg?branch=master)](https://github.com/brettt89/incapsula-php)
+
 ## Installation
 
 The recommended way to install this package is via the Packagist Dependency Manager ([brettt89/incapsula-sdk](https://packagist.org/packages/brettt89/incapsula-sdk)).
@@ -28,9 +30,9 @@ Note that this repository is currently under development, additional classes and
 ```php
 $key        = new Incapsula\API\Parameters\Auth('Api-ID', 'Api-Key');
 $adapter    = new Incapsula\API\Adapter\Guzzle($key);
-$account       = new Incapsula\API\Endpoints\Account($adapter);
+$account    = new Incapsula\API\Endpoints\Account($adapter);
 
 $account_id = 123456;
     
-echo $account->getStatus($account_id);
+print_r($account->getStatus($account_id));
 ```
