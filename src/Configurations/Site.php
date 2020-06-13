@@ -2,6 +2,8 @@
 
 namespace Incapsula\API\Configurations;
 
+use Incapsula\API\Interfaces\Configuration;
+
 class Site implements Configuration
 {
     private $configs = [];
