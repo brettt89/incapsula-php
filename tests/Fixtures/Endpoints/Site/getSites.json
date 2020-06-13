@@ -1,0 +1,66 @@
+{
+    "sites": [
+        {
+            "status": "Test-Status",
+            "ips": [ "34.33.22.1" ],
+            "dns":
+            [
+                { "dns_record_name": "www.example.com",
+                "set_type_to": "CNAME",
+                "set_data_to": "x343.incapdns.net"
+                },
+                { "dns_record_name": "example.com",
+                "set_type_to": "A",
+                "set_data_to": "10.200.0.0"
+                }
+            ],
+            "original_dns":[
+                {
+                    "dns_record_name":"example.com",
+                    "set_type_to":"A",
+                    "set_data_to":[
+                        "66.45.177.11"
+                    ]
+                },
+                {
+                    "dns_record_name":"www.example.com",
+                    "set_type_to":"A",
+                    "set_data_to":[
+                        "66.45.177.50"
+                    ]
+                }
+            ]
+        },
+        {
+            "status": "Test-Status 2",
+            "ips": [ "11.22.33.44" ],
+            "dns":
+            [
+                { "dns_record_name": "www.example.com",
+                "set_type_to": "CNAME",
+                "set_data_to": "x343.incapdns.net"
+                },
+                { "dns_record_name": "example.com",
+                "set_type_to": "A",
+                "set_data_to": "10.200.0.0"
+                }
+            ],
+            "original_dns":[
+                {
+                    "dns_record_name":"example.com",
+                    "set_type_to":"A",
+                    "set_data_to":[
+                        "66.45.177.11"
+                    ]
+                },
+                {
+                    "dns_record_name":"www.example.com",
+                    "set_type_to":"A",
+                    "set_data_to":[
+                        "66.45.177.50"
+                    ]
+                }
+            ]
+        }
+    ]
+}

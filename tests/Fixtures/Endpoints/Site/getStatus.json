@@ -1,0 +1,259 @@
+{
+    "res": 0,
+    "res_message": "OK",
+    "status": "pending-dns-changes",
+    "ips": [ "34.33.22.1" ],
+    "dns":
+    [
+        { "dns_record_name": "www.example.com",
+          "set_type_to": "CNAME",
+          "set_data_to": "x343.incapdns.net"
+        },
+        { "dns_record_name": "example.com",
+          "set_type_to": "A",
+          "set_data_to": "10.200.0.0"
+        }
+    ],
+    "original_dns":[
+        {
+            "dns_record_name":"example.com",
+            "set_type_to":"A",
+            "set_data_to":[
+                "66.45.177.11"
+            ]
+        },
+        {
+            "dns_record_name":"www.example.com",
+            "set_type_to":"A",
+            "set_data_to":[
+                "66.45.177.50"
+            ]
+        }
+    ],
+    "warnings":
+    [
+        {
+          "type":"FTP",
+          "dns_record_name": "ftp.example.com",
+          "set_type_to": "A",
+          "set_data_to": "10.200.0.0"
+        },
+        {
+          "type":"MAIL",
+          "mail_record_name": "mail.example.com",
+          "set_type_to": "A",
+          "set_data_to": "10.200.0.0"
+        }
+    ],
+    "security": {
+		"waf": {
+			"rules" : [
+				{
+					"id":"api.threats.bot_access_control",
+					"name":"Bot Access Control",
+					"block_bad_bots":true,
+					"challenge_suspected_bots":true
+				},
+				{
+					"id":"api.threats.sql_injection",
+					"name":"SQL Injection",
+					"action":"api.threats.action.block_request",
+					"action_text":"Block Request"
+				},
+				{
+					"id":"api.threats.cross_site_scripting",
+					"name":"Cross Site Scripting (XSS)",
+					"exceptions":[
+                        {
+                            "values":[
+                                {
+                                    "urls":[
+                                        {
+                                            "value":"/gsddg",
+                                            "pattern":"EQUALS"
+                                        }
+                                    ],
+                                    "id":"api.rule_exception_type.url",
+                                    "name":"URL"
+                                }
+                            ],
+                            "id":244711494
+                        }
+                    ],
+					"action":"api.threats.action.alert",
+					"action_text":"Alert Only"
+				},
+				{
+					"id":"api.threats.illegal_resource_access",
+					"name":"Illegal Resource Access",
+					"action":"api.threats.action.block_user",
+					"action_text":"Block User"
+				},
+				{
+					"id":"api.threats.ddos",
+					"name":"DDoS",
+					"activation_mode":"api.threats.ddos.activation_mode.off",
+					"activation_mode_text":"Off",
+					"ddos_traffic_threshold":"api.threats.ddos.ddos_trassic_threshold",
+					"ddos_traffic_threshold_text":"750"
+				},
+				{
+					"id":"api.threats.backdoor",
+					"name":"Backdoor Protect",
+					"action":"api.threats.action.quarantine_url",
+					"action_text":"Auto-Quarantine"
+				},
+				{
+					"action":"api.threats.action.block_ip",
+					"action_text":"Block IP",
+					"id":"api.threats.remote_file_inclusion",
+					"name":"Remote File Inclusion"
+				}
+			]
+		},
+		"acls":{
+            "rules":[
+                {
+                    "ips":[
+                        "2.3.4.5"
+                    ],
+                    "exceptions":[
+                        {
+                            "values":[
+                                {
+                                    "urls":[
+                                        {
+                                            "value":"/home",
+                                            "pattern":"EQUALS"
+                                        }
+                                    ],
+                                    "id":"api.rule_exception_type.url",
+                                    "name":"URL"
+                                }
+                            ],
+                            "id":493271006
+                        }
+                    ],
+                    "id":"api.acl.blacklisted_ips",
+                    "name":"Visitors from blacklisted IPs"
+                }
+            ]
+        }
+    },
+    "active": "active",
+    "acceleration_level": "advanced",
+    "site_creation_date": 1372573842000,
+    "sealLocation":{
+        "id":"api.seal_location.bottom_right",
+        "name":"Bottom right"
+    },
+    "ssl" : {
+    	"origin_server":{
+            "detected":false,
+            "detectionStatus":"hostname_mismatch"
+        },
+    	"generated_certificate" : {
+	    	"ca" : "globalsign",
+	    	"validation_method" : "dns",
+	    	"validation_data" : [
+	    		{"dns_record_name": "www.example.com", "set_type_to": "TXT", "set_data_to": "globalsign-domain-verification=rgwlWGF7wQsdWdhbd54pGGruzskFMVezwMvnUtRAzW"}
+	        ],
+	    	"san" : ["*.example.com", "example.com"],
+	    	"validation_status" : "pending_user_action"
+    	},
+
+    	"custom_certificate" : {
+            "active":true,
+            "expirationDate":1460100446000,
+            "revocationError":false,
+            "validityError":false,
+            "chainError":false,
+            "hostnameMismatchError":true
+        }
+    },
+    "login_protect":{
+        "enabled":true,
+        "specific_users_list":[
+            {
+                "email":"john@example.com",
+                "name":"John Doe",
+                "status":"INVITATION_SENT"
+            },
+            {
+                "email":"jane@example.com",
+                "name":"Jane Doe",
+                "status":"ACTIVATED"
+            }
+        ],
+        "send_lp_notifications":true,
+        "allow_all_users":false,
+        "authentication_methods":[
+            "sms",
+            "ga"
+        ],
+        "urls":[
+            "/wp-admin"
+        ],
+        "url_patterns":[
+            "PREFIX"
+        ]
+    },
+    "performance_configuration":{
+        "advanced_caching_rules":{
+            "never_cache_resources":[
+                {
+                    "pattern":"SUFFIX",
+                    "url":"/test.html"
+                }
+            ],
+            "always_cache_resources":[
+                {
+                    "pattern":"NOT_EQUALS",
+                    "url":"/index.html",
+                    "ttl":5,
+                    "ttlUnits":"SECONDS"
+                },
+                {
+                    "pattern":"EQUALS",
+                    "url":"/home.html",
+                    "ttl":6,
+                    "ttlUnits":"DAYS"
+                }
+            ]
+        },
+        "acceleration_level":"advanced",
+        "async_validation":true,
+        "minify_javascript":true,
+        "minify_css":true,
+        "minify_static_html":true,
+        "compress_jpeg":true,
+        "progressive_image_rendering":true,
+        "aggressive_compression":true,
+        "compress_png":true,
+        "on_the_fly_compression":true,
+        "tcp_pre_pooling":true,
+        "comply_no_cache":true,
+        "comply_vary":true,
+        "use_shortest_caching":true,
+        "support_all_tls_versions":true,
+        "use_wildcard_san_instead_of_full_domain_san":true,
+        "add_naked_domain_san":true,
+        "prefer_last_modified":true,
+        "disable_client_side_caching":true,
+        "cache_headers":[
+            {
+                "headerName":"Content-type: application/pdf"
+            }
+        ]
+                ,
+        "incap_rules" : [
+        	{
+        		"id":123,
+        		"name":"Block Click Worms",
+        		"action":"api.rule_action_type.rule_action_block",
+        		"creation_date":1372573842000,
+        		"rule":"ClientIP == 1.2.3.4"
+        	}
+        ]
+    }
+}

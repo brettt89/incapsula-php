@@ -1,0 +1,6 @@
+{
+    "debug_info": {
+        "support_all_tls_versions": "true",
+        "new_A_record": "1.2.3.4"
+    }
+}
