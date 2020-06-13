@@ -3,14 +3,14 @@
     "description": "PHP Incapsula SDK for Incapsula API",
     "type": "library",
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "ext-json": "^1.6",
         "guzzlehttp/guzzle": "^6.5",
         "psr/http-message": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
-        "phpunit/phpunit": "^8.4"
+        "phpunit/phpunit": "^7"
     },
     "license": "BSD-3-Clause",
     "authors": [
