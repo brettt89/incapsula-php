@@ -1,36 +1,50 @@
-# Incapsula SDK (v1 API Binding for PHP 7)
+# Cloudflare SDK (v4 API Binding for PHP 7)
+
+[![PHP Composer]https://github.com/brettt89/incapsula-php/workflows/PHP%20Composer/badge.svg?branch=master](https://github.com/brettt89/incapsula-php)
 
 ## Installation
 
-The recommended way to install this package is via the Packagist Dependency Manager ([brettt89/incapsula-sdk](https://packagist.org/packages/brettt89/incapsula-sdk)).
+The recommended way to install this package is via the Packagist Dependency Manager ([cloudflare/sdk](https://packagist.org/packages/cloudflare/sdk)). You can get specific usage examples on the Cloudflare Knowledge Base under: [Cloudflare PHP API Binding](https://support.cloudflare.com/hc/en-us/articles/115001661191)
 
-```bash
-$ composer require brettt89/incapsula-sdk
-```
+## Cloudflare API version 4
 
-## Incapsula API version 1
+The Cloudflare API can be found [here](https://api.cloudflare.com/).
+Each API call is provided via a similarly named function within various classes in the **Cloudflare\API\Endpoints** namespace:
 
-The Incapsula API can be found [here](https://docs.imperva.com/bundle/cloud-application-security/page/api/api.htm).
-Each API call is provided via a similarly named function within various classes in the **Incapsula\API\Endpoints** namespace:
-
-- [x] [Account](https://docs.imperva.com/bundle/cloud-application-security/page/api/accounts-api.htm)
-- [ ] [Sites](https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm)
-- [ ] [DDoS Protection](https://docs.imperva.com/bundle/cloud-application-security/page/api/ddos-for-networks.htm)
-- [ ] [Traffic Statistics and Details](https://docs.imperva.com/bundle/cloud-application-security/page/api/traffic-api.htm)
-- [ ] [Login Protect](https://docs.imperva.com/bundle/cloud-application-security/page/api/login-protect-api.htm)
-- [ ] [Integration API](https://docs.imperva.com/bundle/cloud-application-security/page/api/integration-api.htm)
-- [ ] [Infrastructure Protection Test Alerts](https://docs.imperva.com/bundle/cloud-application-security/page/api/network-ddos-api.htm)
+- [x] [DNS Records](https://www.cloudflare.com/dns/)
+- [x] Zones
+- [x] User Administration (partial)
+- [x] [Cloudflare IPs](https://www.cloudflare.com/ips/)
+- [x] [Page Rules](https://support.cloudflare.com/hc/en-us/articles/200168306-Is-there-a-tutorial-for-Page-Rules-)
+- [x] [Web Application Firewall (WAF)](https://www.cloudflare.com/waf/)
+- [ ] Virtual DNS Management
+- [x] Custom hostnames
+- [x] Manage TLS settings
+- [x] Zone Lockdown and User-Agent Block rules
+- [ ] Organization Administration
+- [x] [Railgun](https://www.cloudflare.com/railgun/) administration
+- [ ] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
+- [ ] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
+- [x] Crypto
+- [x] Load Balancers
+- [x] Firewall Settings
 
 Note that this repository is currently under development, additional classes and endpoints being actively added.
 
 ## Getting Started
 
 ```php
-$key        = new Incapsula\API\Parameters\Auth('Api-ID', 'Api-Key');
-$adapter    = new Incapsula\API\Adapter\Guzzle($key);
-$account       = new Incapsula\API\Endpoints\Account($adapter);
-
-$account_id = 123456;
+$key     = new Cloudflare\API\Auth\APIKey('user@example.com', 'apiKey');
+$adapter = new Cloudflare\API\Adapter\Guzzle($key);
+$user    = new Cloudflare\API\Endpoints\User($adapter);
     
-echo $account->getStatus($account_id);
+echo $user->getUserID();
 ```
+
+## Contributions
+
+We welcome community contribution to this repository. [CONTRIBUTING.md](CONTRIBUTING.md) will help you start contributing.
+
+## Licensing 
+
+Licensed under the 3-clause BSD license. See the [LICENSE](LICENSE) file for details.
