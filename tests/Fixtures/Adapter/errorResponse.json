@@ -1,0 +1,8 @@
+{
+    "res":3011,
+    "res_message":"Site unresolvable",
+    "debug_info":{
+        "problem":"Site has no valid DNS records",
+        "id-info":"13008"
+    }
+}

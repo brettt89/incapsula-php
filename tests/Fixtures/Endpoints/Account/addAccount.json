@@ -1,0 +1,14 @@
+{
+    "account":{
+        "email":"demo_account@imperva.com",
+        "plan_id":34,
+        "account_id":4722,
+        "user_name":"John Doe",
+        "account_name":"Demo Account",
+        "logins": {
+            "login_id":1243,
+            "email":"demo_account@imperva.com",
+            "email_verified":true
+        }
+    }
+}

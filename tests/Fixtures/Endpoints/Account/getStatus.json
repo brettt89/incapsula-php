@@ -1,0 +1,21 @@
+{
+    "account":{
+        "email":"demo_account@imperva.com",
+        "plan_id":34,
+        "plan_name":"Enterprise",
+        "trial_end_date":"May 28, 2014",
+        "account_id":4722,
+        "ref_id":"123456",
+        "user_name":"John Doe",
+        "account_name":"Demo Account",
+        "logins": {
+            "login_id":1243,
+            "email":"demo_account@imperva.com",
+            "email_verified":true
+        },
+        "support_level": "Managed",
+        "support_all_tls_versions": "false",
+        "wildcard_san_for_new_sites": "true",
+        "naked_domain_san_for_new_www_sites": "true"
+    }
+}
