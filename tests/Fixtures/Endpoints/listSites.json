@@ -1,0 +1,12 @@
+{
+    "res": 0,
+    "res_message": "OK",
+    "debug_info": {},
+    "sites": [
+      {
+        "site_id": "1234567",
+        "domain": "www.example.com",
+        "ips": ["1.1.1.1", "2.2.2.2"]
+      }
+    ]
+  }
