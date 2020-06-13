@@ -56,7 +56,7 @@ abstract class TestCase extends BaseTestCase
 
         if ($uri !== null) {
             if ($options !== null) {
-                $this->getAdapter()->expects($this->once())
+                $this->adapter->expects($this->once())
                     ->method('request')
                     ->with(
                         $this->equalTo($uri),

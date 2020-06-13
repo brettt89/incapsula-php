@@ -87,7 +87,7 @@ class Account implements Endpoint
         $query = $this->adapter->request('/api/prov/v1/accounts/delete', $options);
 
         $this->body = json_decode($query->getBody());
-        return true;
+        return empty((array) $this->body);
     }
 
     //
