@@ -1,5 +1,5 @@
 {
-    "name": "incapsula/sdk",
+    "name": "brettt89/incapsula-sdk",
     "description": "PHP Incapsula SDK for Incapsula API",
     "type": "library",
     "require": {
