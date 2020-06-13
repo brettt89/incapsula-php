@@ -84,7 +84,7 @@ class AccountTest extends \TestCase
         $this->assertObjectHasAttribute('logins', $accounts[0]);
         $this->assertIsObject($accounts[0]->logins);
 
-        $this->assertObjectHasAttribute('login_id',  $accounts[0]->logins);
+        $this->assertObjectHasAttribute('login_id', $accounts[0]->logins);
         $this->assertEquals(1243, $accounts[0]->logins->login_id);
     }
 
