@@ -1,0 +1,30 @@
+{
+    "accounts":[
+        {
+            "parent_id":123,
+            "email":"demo_account@imperva.com",
+            "plan_id":34,
+            "account_id":4722,
+            "user_name":"John Doe",
+            "account_name":"Demo Account",
+            "logins": {
+                "login_id":1243,
+                "email":"demo_account@imperva.com",
+                "email_verified":true
+            }
+        },
+        {
+            "parent_id":456,
+            "email":"demo_account2@imperva.com",
+            "plan_id":34,
+            "account_id":1234,
+            "user_name":"Jane Doe",
+            "account_name":"Demo Account #2",
+            "logins": {
+                "login_id":5678,
+                "email":"demo_account2@imperva.com",
+                "email_verified":false
+            }
+        }
+    ]
+}

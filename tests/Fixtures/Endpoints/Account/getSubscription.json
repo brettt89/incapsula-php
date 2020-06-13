@@ -1,0 +1,98 @@
+{
+    "planStatus": {
+        "accountId": 12345,
+        "accountName": "demo_account@imperva.com",
+        "websiteProtection": {
+        "name": "Website Protection",
+        "planSectionRows": [
+            {
+                "name": "Additional Sites",
+                "purchased": "100",
+                "used": "2"
+            },
+            {
+                "name": "Load Balancing (old)",
+                "purchased": "0",
+                "used": "0"
+            },
+            {
+                "name": "Additional Login Protect Users",
+                "purchased": "5",
+                "used": "0"
+            }
+        ]
+        },
+        "infrastructureProtection": {
+        "name": "Infrastructure Protection",
+        "planSectionRows": [
+            {
+                "name": "On Demand Bandwidth (Clean traffic)",
+                "purchased": "0",
+                "used": ""
+            },
+            {
+                "name": "GRE Tunnel Pairs",
+                "purchased": "0  ",
+                "used": "0"
+            }
+        ]
+        },
+        "dnsProtection": {
+        "name": "DNS Protection",
+        "planSectionRows": [
+            {
+                "name": "Additional DNS Zones",
+                "purchased": "0",
+                "used": "0"
+            }
+        ]
+        },
+        "additionalServices": {
+        "name": "Additional Services",
+        "planSectionRows": [
+            {
+                "name": "Always On Bandwidth (Clean traffic)",
+                "purchased": "10Mbps",
+                "used": "N/A"
+            },
+            {
+                "name": "DDoS Protection",
+                "purchased": "None",
+                "used": ""
+            },
+            {
+                "name": "Support Level",
+                "purchased": "Standard",
+                "used": "Standard"
+            },
+            {
+                "name": "SIEM Integration",
+                "purchased": "10",
+                "used": "0"
+            },
+            {
+                "name": "Web Attack Analytics",
+                "purchased": "0",
+                "used": ""
+            }
+        ]
+        }
+    },
+    "bandwidthHistory": [
+        {
+            "billingCycle": "Current billing cycle",
+            "onDemandBandwidth": "0bps",
+            "alwaysOnBandwidth": "3.5kbps"
+        },
+        {
+            "billingCycle": "Previous billing cycle",
+            "onDemandBandwidth": "0bps",
+            "alwaysOnBandwidth": "15kbps"
+        },
+        {
+            "billingCycle": "Earlier billing cycle",
+            "onDemandBandwidth": "0bps",
+            "alwaysOnBandwidth": "7.7kbps"
+        }
+    ]
+}
