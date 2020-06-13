@@ -2,6 +2,8 @@
 
 namespace Incapsula\API\Configurations;
 
+use Incapsula\API\Interfaces\Configuration;
+
 class Account implements Configuration
 {
     private $configs = [];

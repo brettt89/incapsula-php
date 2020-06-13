@@ -2,27 +2,28 @@
 
 namespace Incapsula\API\Tests\Endpoints;
 
-use GuzzleHttp\Psr7\Response;
+use Incapsula\API\Tests\Interfaces\TestConfigure;
+use Incapsula\API\Tests\Interfaces\TestEndpoint;
 
-class AccountTest extends \TestCase
+class AccountTest extends \TestCase implements TestConfigure, TestEndpoint
 {
-    private $accountConfig;
     private $endpoint;
+    private $config;
 
-    protected function getEndpoint()
+    public function getEndpoint(): \Incapsula\API\Interfaces\Endpoint
     {
         if (!isset($this->endpoint)) {
-            $this->endpoint = new \Incapsula\API\Endpoints\Account($this->getAdapter());
+            $this->endpoint = new \Incapsula\API\Endpoints\Accounts($this->getAdapter());
         }
         return $this->endpoint;
     }
 
-    protected function getAccountConfig()
+    public function getConfig(): \Incapsula\API\Interfaces\Configuration
     {
-        if (!isset($this->accountConfig)) {
-            $this->accountConfig = new \Incapsula\API\Configurations\Account();
+        if (!isset($this->config)) {
+            $this->config = new \Incapsula\API\Configurations\Account();
         }
-        return $this->accountConfig;
+        return $this->config;
     }
 
     //
@@ -42,10 +43,10 @@ class AccountTest extends \TestCase
         $this->assertEquals('Enterprise', $status->plan_name);
     }
 
-    public function testLoginToken()
+    public function testToken()
     {
         $this->setAdapter('Endpoints/Account/getLoginToken.json', '/api/prov/v1/accounts/gettoken');
-        $token = $this->getEndpoint()->getLoginToken();
+        $token = $this->getEndpoint()->getToken();
 
         $this->assertIsString($token);
         $this->assertEquals('344ebcaf34dff34', $token);
@@ -68,10 +69,10 @@ class AccountTest extends \TestCase
     // Managed Accounts
     //
 
-    public function testGetManagedAccounts()
+    public function testGetList()
     {
         $this->setAdapter('Endpoints/Account/getAccounts.json', '/api/prov/v1/accounts/list');
-        $accounts = $this->getEndpoint()->getManagedAccounts();
+        $accounts = $this->getEndpoint()->getList();
 
         $this->assertIsArray($accounts);
         $this->assertCount(2, $accounts);
@@ -88,7 +89,7 @@ class AccountTest extends \TestCase
         $this->assertEquals(1243, $accounts[0]->logins->login_id);
     }
 
-    public function testAddManagedAccount()
+    public function testAdd()
     {
         $this->setAdapter(
             'Endpoints/Account/addAccount.json',
@@ -98,7 +99,7 @@ class AccountTest extends \TestCase
             ]
         );
 
-        $account = $this->getEndpoint()->addManagedAccount('demo_account@imperva.com', $this->getAccountConfig());
+        $account = $this->getEndpoint()->add('demo_account@imperva.com', $this->getConfig());
 
         $this->assertIsObject($account);
 
@@ -106,7 +107,7 @@ class AccountTest extends \TestCase
         $this->assertEquals('demo_account@imperva.com', $account->email);
     }
 
-    public function testDeleteManagedAccount()
+    public function testDelete()
     {
         $this->setAdapter(
             'Endpoints/success.json',
@@ -116,87 +117,13 @@ class AccountTest extends \TestCase
             ]
         );
 
-        $result = $this->getEndpoint()->deleteManagedAccount(12345);
+        $result = $this->getEndpoint()->delete(12345);
 
         $this->assertTrue($result);
     }
 
     //
-    // Sub Accounts
-    //
-
-    public function testGetSubAccounts()
-    {
-        $this->setAdapter('Endpoints/Account/getSubAccounts.json', '/api/prov/v1/accounts/listSubAccounts');
-        $subAccounts = $this->getEndpoint()->getSubAccounts();
-
-        $this->assertIsArray($subAccounts);
-        $this->assertCount(2, $subAccounts);
-
-        $this->assertObjectHasAttribute('sub_account_id', $subAccounts[0]);
-        $this->assertEquals(123456, $subAccounts[0]->sub_account_id);
-        $this->assertObjectHasAttribute('sub_account_name', $subAccounts[1]);
-        $this->assertEquals('My super lovely sub account', $subAccounts[1]->sub_account_name);
-    }
-
-    public function testAddSubAccount()
-    {
-        $this->setAdapter(
-            'Endpoints/Account/addSubAccount.json',
-            '/api/prov/v1/subaccounts/add',
-            [
-                'sub_account_name' => 'Sub Account Name'
-            ]
-        );
-        
-        $subAccount = $this->getEndpoint()->addSubAccount('Sub Account Name', $this->getAccountConfig());
-
-        $this->assertIsObject($subAccount);
-
-        $this->assertObjectHasAttribute('sub_account_id', $subAccount);
-        $this->assertEquals(123456, $subAccount->sub_account_id);
-        $this->assertObjectHasAttribute('support_level', $subAccount);
-        $this->assertEquals('Standard', $subAccount->support_level);
-    }
-
-    public function testDeleteSubAccount()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/subaccounts/delete',
-            [
-                'sub_account_id' => 12345
-            ]
-        );
-
-        $result = $this->getEndpoint()->deleteSubAccount(12345);
-
-        $this->assertTrue($result);
-    }
-
-    //
-    // Configurations
-    //
-
-    public function testSetConfiguration()
-    {
-        $this->setAdapter(
-            'Endpoints/Account/setConfiguration.json',
-            '/api/prov/v1/accounts/configure',
-            [
-                'account_id' => 12345,
-                'param' => 'email',
-                'value' => 'admin@example.com'
-            ]
-        );
-
-        $result = $this->getEndpoint()->setConfiguration(12345, 'email', 'admin@example.com');
-
-        $this->assertTrue($result);
-    }
-
-    //
-    // Log Level
+    // Logs
     //
 
     public function testSetLogLevel()
@@ -214,10 +141,6 @@ class AccountTest extends \TestCase
 
         $this->assertTrue($result);
     }
-
-    //
-    // Log Storage
-    //
 
     public function testTestS3Connection()
     {
@@ -330,41 +253,6 @@ class AccountTest extends \TestCase
         );
 
         $result = $this->getEndpoint()->setDefaultSiemStorage(12345);
-
-        $this->assertTrue($result);
-    }
-
-    //
-    // Data Region
-    //
-
-    public function testGetDataStorageRegion()
-    {
-        $this->setAdapter(
-            'Endpoints/Account/getDataStorageRegion.json',
-            '/api/prov/v1/accounts/data-privacy/show',
-            [
-                'account_id' => 12345
-            ]
-        );
-
-        $region = $this->getEndpoint()->getDataStorageRegion(12345);
-
-        $this->assertEquals('EU', $region);
-    }
-
-    public function testSetDataStorageRegion()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/accounts/data-privacy/set-region-default',
-            [
-                'account_id' => 12345,
-                'region' => 'EU'
-            ]
-        );
-
-        $result = $this->getEndpoint()->setDataStorageRegion(12345, 'EU');
 
         $this->assertTrue($result);
     }

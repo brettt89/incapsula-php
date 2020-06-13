@@ -1,6 +1,6 @@
 <?php
 
-namespace Incapsula\API\Configurations;
+namespace Incapsula\API\Interfaces;
 
 interface Configuration
 {

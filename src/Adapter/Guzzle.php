@@ -2,8 +2,10 @@
 
 namespace Incapsula\API\Adapter;
 
+use Incapsula\API\Interfaces\Adapter;
+use Incapsula\API\Interfaces\Parameter;
+use Incapsula\API\Interfaces\Configuration;
 use Incapsula\API\Parameters\Auth;
-use Incapsula\API\Parameters\Parameter;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 

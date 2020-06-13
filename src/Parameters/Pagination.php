@@ -2,6 +2,8 @@
 
 namespace Incapsula\API\Parameters;
 
+use Incapsula\API\Interfaces\Parameter;
+
 class Pagination implements Parameter
 {
     private $pageSize;
