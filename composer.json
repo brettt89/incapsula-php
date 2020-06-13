@@ -1,0 +1,37 @@
+{
+    "name": "incapsula/sdk",
+    "description": "PHP Incapsula SDK for Incapsula API",
+    "type": "library",
+    "require": {
+        "php": ">=7.0",
+        "ext-json": "^1.6",
+        "guzzlehttp/guzzle": "^6.5",
+        "psr/http-message": "^1.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpunit/phpunit": "^8.5"
+    },
+    "license": "BSD-3-Clause",
+    "authors": [
+      {
+        "name": "Brett Tasker",
+        "email": "brett.tasker@gmail.com"
+      }
+    ],
+    "autoload": {
+      "psr-4": {
+        "Incapsula\\API\\": "src/"
+      }
+    },
+    "autoload-dev": {
+      "classmap": [
+          "tests/"
+      ]
+    },
+    "config": {
+      "preferred-install": "dist",
+      "sort-packages": true,
+      "optimize-autoloader": true
+    }
+  }
