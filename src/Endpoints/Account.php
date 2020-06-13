@@ -58,7 +58,9 @@ class Account implements Endpoint
     public function getManagedAccounts(int $account_id = null, Pagination $pagination = null): array
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
-        if ($pagination !== null) $options[] = $pagination;
+        if ($pagination !== null) {
+            $options[] = $pagination;
+        }
 
         $query = $this->adapter->request('/api/prov/v1/accounts/list', $options);
 
@@ -95,7 +97,9 @@ class Account implements Endpoint
     public function getSubAccounts(int $account_id = null, Pagination $pagination = null): array
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
-        if ($pagination !== null) $options[] = $pagination;
+        if ($pagination !== null) {
+            $options[] = $pagination;
+        }
 
         $query = $this->adapter->request('/api/prov/v1/accounts/listSubAccounts', $options);
 
