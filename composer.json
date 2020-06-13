@@ -29,6 +29,9 @@
           "tests/"
       ]
     },
+    "scripts": {
+        "test": "phpunit"
+    },
     "config": {
       "preferred-install": "dist",
       "sort-packages": true,
