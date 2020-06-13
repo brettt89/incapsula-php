@@ -51,7 +51,10 @@ abstract class TestCase extends BaseTestCase
     {
         $response = $this->getPsr7JsonResponseForFixture($fixture);
 
-        $this->adapter = $this->getMockBuilder(\Incapsula\API\Adapter\Adapter::class)->getMock();
+        $this->adapter = $this->getMockBuilder(\Incapsula\API\Adapter\Adapter::class)
+            ->setMethods(['request'])
+            ->getMock();
+        
         $this->adapter->method('request')->willReturn($response);
 
         if ($uri !== null) {

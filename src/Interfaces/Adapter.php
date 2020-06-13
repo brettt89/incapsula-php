@@ -1,6 +1,6 @@
 <?php
 
-namespace Incapsula\API\Adapter;
+namespace Incapsula\API\Interfaces;
 
 use Incapsula\API\Parameters\Auth;
 use Psr\Http\Message\ResponseInterface;

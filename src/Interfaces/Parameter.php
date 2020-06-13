@@ -1,6 +1,6 @@
 <?php
 
-namespace Incapsula\API\Parameters;
+namespace Incapsula\API\Interfaces;
 
 interface Parameter
 {

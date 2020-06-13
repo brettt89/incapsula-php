@@ -2,6 +2,8 @@
 
 namespace Incapsula\API\Parameters;
 
+use Incapsula\API\Interfaces\Parameter;
+
 class TimeRange implements Parameter
 {
     const TODAY='today';
