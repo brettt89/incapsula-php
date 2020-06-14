@@ -18,7 +18,7 @@ The Incapsula API can be found [here](https://docs.imperva.com/bundle/cloud-appl
 Each API call is provided via a similarly named function within various classes in the **Incapsula\API\Endpoints** namespace:
 
 - [x] [Account](https://docs.imperva.com/bundle/cloud-application-security/page/api/accounts-api.htm)
-- [ ] [Sites](https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm) (coming soon)
+- [x] [Sites](https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm)
 - [ ] [DDoS Protection](https://docs.imperva.com/bundle/cloud-application-security/page/api/ddos-for-networks.htm) (coming soon)
 - [ ] [Traffic Statistics and Details](https://docs.imperva.com/bundle/cloud-application-security/page/api/traffic-api.htm) (coming soon)
 - [ ] [Login Protect](https://docs.imperva.com/bundle/cloud-application-security/page/api/login-protect-api.htm) (coming soon)
