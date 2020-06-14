@@ -62,6 +62,13 @@ jobs:
       with:
         name: build
 
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: intl, json
+        coverage: xdebug
+
     - name: Run PHPUnit code coverage
       run: composer run-script coverage
 
