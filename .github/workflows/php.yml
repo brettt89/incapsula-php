@@ -78,12 +78,6 @@ jobs:
 
     - name: Run PHPUnit code coverage
       run: composer run-script coverage
-
-    - name: Archive code coverage results
-      uses: actions/upload-artifact@v1
-      with:
-        name: code-coverage-report
-        path: build/coverage-report
   
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
