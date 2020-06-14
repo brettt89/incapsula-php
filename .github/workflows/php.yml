@@ -25,7 +25,7 @@ jobs:
         extensions: intl, json
         coverage: xdebug
 
-    - name: Validate composer.json and composer.lock
+    - name: Validate composer.json
       run: composer validate
       
     - name: Cache Composer packages
@@ -33,13 +33,16 @@ jobs:
       uses: actions/cache@v2
       with:
         path: vendor
-        key: ${{ runner.os }}-node-${{ hashFiles('**/composer.lock') }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/composer.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
 
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Update autoloader
+      run: composer dump-autoload
 
     - name: Run test suite
       run: composer run-script test
