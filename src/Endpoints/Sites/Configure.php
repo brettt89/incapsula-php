@@ -56,7 +56,7 @@ class Configure extends BaseClass
             'rule_id' => $rule_id,
         ]);
 
-        if ($whitelist_id) $options['whitelist_id'] = $whitelist_id;
+        if (isset($whitelist_id)) $options['whitelist_id'] = $whitelist_id;
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/configure/whitelists', $options);
 
