@@ -16,7 +16,7 @@ class DataPrivacyTest extends \TestCase implements TestEndpoint
         return $this->endpoint;
     }
 
-    public function testGet()
+    public function testGetDefault()
     {
         $this->setAdapter(
             'Endpoints/Account/getDataStorageRegion.json',
@@ -26,12 +26,12 @@ class DataPrivacyTest extends \TestCase implements TestEndpoint
             ]
         );
 
-        $region = $this->getEndpoint()->get();
+        $region = $this->getEndpoint()->getDefault();
 
         $this->assertEquals('EU', $region);
     }
 
-    public function testSet()
+    public function testSetDefault()
     {
         $this->setAdapter(
             'Endpoints/success.json',
@@ -42,7 +42,7 @@ class DataPrivacyTest extends \TestCase implements TestEndpoint
             ]
         );
 
-        $result = $this->getEndpoint()->set('EU');
+        $result = $this->getEndpoint()->setDefault('EU');
 
         $this->assertTrue($result);
     }

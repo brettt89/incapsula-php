@@ -6,7 +6,7 @@ use Incapsula\API\Endpoints\Accounts\BaseClass;
 
 class DataPrivacy extends BaseClass
 {
-    public function get(): string
+    public function getDefault(): string
     {
         $options = [
             'account_id' => $this->getAccountID()
@@ -18,7 +18,7 @@ class DataPrivacy extends BaseClass
         return $this->body->region;
     }
 
-    public function set(string $region): bool
+    public function setDefault(string $region): bool
     {
         $options = [
             'account_id' => $this->getAccountID(),
