@@ -7,8 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
-
+  build_and_test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -46,3 +45,28 @@ jobs:
 
     - name: Run test suite
       run: composer run-script test
+
+    - name: Upload build
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: ./
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: PHPUnit Code Coverage
+    needs: build_and_test
+    steps:
+    - name: Download build
+        uses: actions/download-artifact@v1
+        with:
+          name: build
+
+    - name: Run PHPUnit code coverage
+      run: composer run-script coverage
+
+    - name: Archive code coverage results
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage-report
+          path: build/coverage-report/code-coverage.html
