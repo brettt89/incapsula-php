@@ -47,10 +47,10 @@ jobs:
       run: composer run-script test
 
     - name: Upload build
-        uses: actions/upload-artifact@v1
-        with:
-          name: build
-          path: ./
+      uses: actions/upload-artifact@v1
+      with:
+        name: build
+        path: ./
 
   coverage:
     runs-on: ubuntu-latest
@@ -58,9 +58,9 @@ jobs:
     needs: build_and_test
     steps:
     - name: Download build
-        uses: actions/download-artifact@v1
-        with:
-          name: build
+      uses: actions/download-artifact@v1
+      with:
+        name: build
 
     - name: Run PHPUnit code coverage
       run: composer run-script coverage
