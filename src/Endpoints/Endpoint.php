@@ -6,7 +6,7 @@ use Incapsula\API\Interfaces\Endpoint as EndpointInterface;
 use Incapsula\API\Adapter\Adapter;
 use Incapsula\API\Traits\APITrait;
 
-class Endpoint implements EndpointInterface
+abstract class Endpoint implements EndpointInterface
 {
     use APITrait;
 
