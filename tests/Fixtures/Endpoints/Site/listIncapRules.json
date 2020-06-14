@@ -1,0 +1,52 @@
+{
+    "incap_rules": {
+      "All": [
+        {
+          "id": "3660",
+          "last_7_days_requests_count": "0",
+          "name": "Ortal",
+          "action": "RULE_ACTION_ALERT",
+          "filter": ""
+        }
+      ]
+    },
+    "delivery_rules": {
+      "Redirect": [
+        {
+          "to": "/home.php",
+          "id": "3648",
+          "priority": "1",
+          "last_7_days_requests_count": "0",
+          "name": "Test new",
+          "action": "RULE_ACTION_REWRITE_URL",
+          "from": "*/home.html",
+          "filter": "ASN == 1"
+        }
+      ],
+      "Forward": [
+        {
+          "id": "3628",
+          "priority": "2",
+          "last_7_days_requests_count": "0",
+          "name": "move to rewrite",
+          "dc_id": "54313",
+          "action": "RULE_ACTION_FORWARD_TO_DC",
+          "filter": ""
+        }
+      ]
+    },
+    "rate_rules":{
+      "Rates":[
+        {
+          "id":"4723",
+          "enabled":"true",
+          "interval":"120",
+          "name":"Test Rate IP",
+          "context":"IP",
+          "action":"RULE_ACTION_RATE",
+          "internal_name":"test-rate-ip",
+          "filter":" ASN == 2"
+        }
+      ]
+    }
+}
