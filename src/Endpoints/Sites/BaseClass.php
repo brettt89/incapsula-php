@@ -1,0 +1,30 @@
+<?php
+
+namespace Incapsula\API\Endpoints\Sites;
+
+use Incapsula\API\Endpoints\Endpoint;
+use Incapsula\API\Adapter\Adapter;
+
+abstract class BaseClass extends Endpoint
+{
+    private $site_id;
+
+    public function __construct(Adapter $adapter, int $site_id)
+    {
+        $this->setSiteID($site_id);
+        parent::__construct($adapter);
+    }
+
+    public function setSiteID(int $site_id)
+    {
+        $this->site_id = $site_id;
+    }
+
+    public function getSiteID(): int
+    {
+        if (!isset($this->site_id)) {
+            throw new LogicException('Site Id must be set');
+        }
+        return $this->site_id;
+    }
+}
