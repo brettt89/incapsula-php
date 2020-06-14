@@ -33,7 +33,7 @@
         "test": "phpunit",
         "coverage": [
           "phpunit --dump-xdebug-filter build/xdebug-filter.php",
-          "phpunit --prepend build/xdebug-filter.php --coverage-html build/coverage-report"
+          "phpunit --prepend build/xdebug-filter.php --coverage-clover=coverage.xml"
         ]
     },
     "config": {
