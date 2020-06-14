@@ -2,13 +2,13 @@
 
 namespace Incapsula\API\Endpoints;
 
-use Incapsula\API\Parameters\Pagination;
-
 class Domain extends Endpoint
 {
     public function getEmails(int $site_id)
     {
-        $options = ['site_id' => $site_id];
+        $options = [
+            'site_id' => $site_id
+        ];
 
         $query = $this->getAdapter()->request('/api/prov/v1/domain/emails', $options);
 
