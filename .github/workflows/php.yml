@@ -46,21 +46,12 @@ jobs:
     - name: Run test suite
       run: composer run-script test
 
-    - name: Upload build
-      uses: actions/upload-artifact@v1
-      with:
-        name: build
-        path: ./
-
   coverage:
     runs-on: ubuntu-latest
     name: PHPUnit Code Coverage
-    needs: build_and_test
     steps:
-    - name: Download build
-      uses: actions/download-artifact@v1
-      with:
-        name: build
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -68,6 +59,22 @@ jobs:
         php-version: '7.4'
         extensions: intl, json
         coverage: xdebug
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-node-${{ hashFiles('**/composer.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Update autoloader
+      run: composer dump-autoload
 
     - name: Run PHPUnit code coverage
       run: composer run-script coverage
