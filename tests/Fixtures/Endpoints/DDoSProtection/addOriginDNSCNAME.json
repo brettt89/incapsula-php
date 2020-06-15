@@ -1,0 +1,7 @@
+{
+    "resolved_cnames": [
+        "imperva.test.com"
+    ],
+    "cname": "imperva.test.com",
+    "edge_ip": "172.17.14.1"
+}
