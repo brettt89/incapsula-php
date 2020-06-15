@@ -1,6 +1,6 @@
 <?php
 
-namespace Incapsula\API\Endpoints;
+namespace Incapsula\API;
 
 use Incapsula\API\Interfaces\Endpoint as EndpointInterface;
 use Incapsula\API\Adapter\Adapter;

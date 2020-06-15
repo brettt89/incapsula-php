@@ -2,17 +2,16 @@
 
 namespace Incapsula\API\Tests\Endpoints;
 
-use Incapsula\API\Tests\Interfaces\TestConfigure;
 use Incapsula\API\Tests\Interfaces\TestEndpoint;
 
-class SitesTest extends \TestCase implements TestEndpoint
+class SiteTest extends \TestCase implements TestEndpoint
 {
     private $endpoint;
 
     public function getEndpoint(): \Incapsula\API\Interfaces\Endpoint
     {
         if (!isset($this->endpoint)) {
-            $this->endpoint = new \Incapsula\API\Endpoints\Sites($this->getAdapter());
+            $this->endpoint = new \Incapsula\API\Endpoints\Site($this->getAdapter());
         }
         return $this->endpoint;
     }
@@ -35,6 +34,24 @@ class SitesTest extends \TestCase implements TestEndpoint
         $this->assertEquals('pending-dns-changes', $status->status);
         $this->assertObjectHasAttribute('ips', $status);
         $this->assertEquals('34.33.22.1', $status->ips[0]);
+    }
+
+    public function testGetDomainApproverEmails()
+    {
+        $this->setAdapter(
+            'Endpoints/Domain/getEmails.json',
+            '/api/prov/v1/domain/emails',
+            [
+                'site_id' => 12345,
+            ]
+        );
+        $emails = $this->getEndpoint()->getDomainApproverEmails(12345);
+
+        $this->assertIsArray($emails);
+        $this->assertCount(2, $emails);
+
+        $this->assertEquals('admin@example.com', $emails[0]);
+        $this->assertEquals('webmaster@example.com', $emails[1]);
     }
 
     //
@@ -104,10 +121,107 @@ class SitesTest extends \TestCase implements TestEndpoint
 
         $this->assertTrue($result);
     }
+    
 
     //
     // Site Configuration
     //
+
+    public function testSetConfig()
+    {
+        $this->setAdapter(
+            'Endpoints/Site/setConfig.json',
+            '/api/prov/v1/sites/configure',
+            [
+                'site_id' => 12345,
+                'param' => 'domain_email',
+                'value' => 'admin@example.com'
+            ]
+        );
+
+        $result = $this->getEndpoint()->setConfig(12345, 'domain_email', 'admin@example.com');
+
+        $this->assertTrue($result);
+    }
+
+    public function testSetSecurityConfig()
+    {
+        $this->setAdapter(
+            'Endpoints/Site/getStatus.json',
+            '/api/prov/v1/sites/configure/security',
+            [
+                'site_id' => 12345,
+                'rule_id' => 'api.threats.bot_access_control',
+                'block_bad_bots' => true,
+                'challenge_suspected_bots' => true
+            ]
+        );
+
+        $result = $this->getEndpoint()->setSecurityConfig(
+            12345,
+            'api.threats.bot_access_control',
+            [
+                'block_bad_bots' => true,
+                'challenge_suspected_bots' => true
+            ]
+        );
+
+        $this->assertIsObject($result);
+    }
+
+    public function testSetACLConfig()
+    {
+        $this->setAdapter(
+            'Endpoints/Site/getStatus.json',
+            '/api/prov/v1/sites/configure/acl',
+            [
+                'site_id' => 12345,
+                'rule_id' => 'api.acl.blacklisted_urls',
+                'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
+                'url_patterns' => 'contains,equals'
+            ]
+        );
+
+        $result = $this->getEndpoint()->setACLConfig(
+            12345,
+            'api.acl.blacklisted_urls',
+            [
+                'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
+                'url_patterns' => 'contains,equals'
+            ]
+        );
+
+        $this->assertIsObject($result);
+    }
+
+    public function testSetWhitelistConfig()
+    {
+        $this->setAdapter(
+            'Endpoints/Site/getStatus.json',
+            '/api/prov/v1/sites/configure/whitelists',
+            [
+                'site_id' => 12345,
+                'rule_id' => 'api.threats.sql_injection',
+                'whitelist_id' => 12345,
+                'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
+                'ips' => '1.2.3.4,192.168.1.1-192.168.1.100,192.168.1.1/24',
+                'countries' => 'GT,VN'
+            ]
+        );
+
+        $result = $this->getEndpoint()->setWhitelistConfig(
+            12345,
+            'api.threats.sql_injection',
+            12345,
+            [
+                'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
+                'ips' => '1.2.3.4,192.168.1.1-192.168.1.100,192.168.1.1/24',
+                'countries' => 'GT,VN'
+            ]
+        );
+
+        $this->assertIsObject($result);
+    }
 
     public function testSetLogLevel()
     {
@@ -181,23 +295,6 @@ class SitesTest extends \TestCase implements TestEndpoint
         );
     }
 
-    public function testPurgeCache()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/cache/purge',
-            [
-                'site_id' => 12345,
-                'pattern' => 'testPattern',
-                'tag_names' => 'test tag,tag2'
-            ]
-        );
-
-        $result = $this->getEndpoint()->purgeCache(12345, 'testPattern', 'test tag,tag2');
-
-        $this->assertTrue($result);
-    }
-
     public function testGetGeeTest()
     {
         $this->setAdapter(
@@ -227,22 +324,6 @@ class SitesTest extends \TestCase implements TestEndpoint
         $result = $this->getEndpoint()->setGeeTest(12345, 'test algorithm');
 
         $this->assertIsObject($result);
-    }
-
-    public function testPurgeHostnameCache()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/hostname/purge',
-            [
-                'site_id' => 12345,
-                'host_name' => 'www.example.com'
-            ]
-        );
-
-        $result = $this->getEndpoint()->purgeHostnameCache(12345, 'www.example.com');
-
-        $this->assertTrue($result);
     }
 
     public function testUploadCustomCertificate()
@@ -315,150 +396,6 @@ class SitesTest extends \TestCase implements TestEndpoint
             "-----BEGIN CERTIFICATE REQUEST-----\nMIICyTCCAbECAQAwgYMxCzAJBgNVBAYTAlVTMREwDwYDVQQIEwhEZWxhd2FyZTEO...",
             $result
         );
-    }
-
-    public function testAddIncapRule()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/incapRules/add',
-            [
-                'site_id' => 12345,
-                'name' => 'test name',
-                'action' => 'RULE_ACTION_REDIRECT',
-                'filter' => 'test Filter',
-                'response_code' => 312
-            ]
-        );
-
-        $result = $this->getEndpoint()->addIncapRule(12345, 'test name', 'RULE_ACTION_REDIRECT', [
-            'filter' => 'test Filter',
-            'response_code' => 312
-        ]);
-
-        $this->assertIsObject($result);
-    }
-
-    public function testUpdateIncapRule()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/incapRules/edit',
-            [
-                'rule_id' => 98765,
-                'action' => 'RULE_ACTION_REDIRECT',
-                'filter' => 'test Filter',
-                'response_code' => 312
-            ]
-        );
-
-        $result = $this->getEndpoint()->updateIncapRule(98765, 'RULE_ACTION_REDIRECT', [
-            'filter' => 'test Filter',
-            'response_code' => 312
-        ]);
-
-        $this->assertIsObject($result);
-    }
-
-    public function testEnableDisableIncapRule()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/incapRules/enableDisable',
-            [
-                'rule_id' => 98765,
-                'enabled' => false
-            ]
-        );
-
-        $result = $this->getEndpoint()->enableDisableIncapRule(98765, false);
-
-        $this->assertIsObject($result);
-    }
-
-    public function testDelteIncapRule()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/incapRules/delete',
-            [
-                'rule_id' => 98765
-            ]
-        );
-
-        $result = $this->getEndpoint()->deleteIncapRule(98765);
-
-        $this->assertIsObject($result);
-    }
-
-    public function testListIncapRules()
-    {
-        $this->setAdapter(
-            'Endpoints/Site/listIncapRules.json',
-            '/api/prov/v1/sites/incapRules/list',
-            [
-                'site_id' => 12345,
-                'include_ad_rules' => true,
-                'include_incap_rules' => false,
-                'page_size' => 100,
-                'page_num' => 2
-            ]
-        );
-
-        $result = $this->getEndpoint()->listIncapRules(12345, true, false, [
-            'page_size' => 100,
-            'page_num' => 2
-        ]);
-
-        $this->assertIsObject($result);
-    }
-
-    public function testListAccountIncapRules()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/incapRules/account/list',
-            [
-                'account_id' => 12345,
-                'include_ad_rules' => true,
-                'include_incap_rules' => false
-            ]
-        );
-
-        $result = $this->getEndpoint()->listAccountIncapRules(12345, true, false);
-
-        $this->assertIsObject($result);
-    }
-
-    public function testSetIncapRulePriority()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/incapRules/priority/set',
-            [
-                'rule_id' => 98765,
-                'priority' => 10
-            ]
-        );
-
-        $result = $this->getEndpoint()->setIncapRulePriority(98765, 10);
-
-        $this->assertIsObject($result);
-    }
-
-    public function testGetXRayLink()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/xray/get-link',
-            [
-                'site_id' => 12345
-            ]
-        );
-
-        $result = $this->getEndpoint()->getXRayLink(12345);
-
-        $this->assertIsObject($result);
     }
 
     public function testSetDataStorageRegion()
@@ -557,5 +494,74 @@ class SitesTest extends \TestCase implements TestEndpoint
         $this->assertIsObject($result);
         $this->assertObjectHasAttribute('status', $result);
         $this->assertEquals('', $result->status);
+    }
+
+    public function testGetRewritePort()
+    {
+        $this->setAdapter(
+            'Endpoints/Site/Performance/getRewritePort.json',
+            '/api/prov/v1/sites/performance/rewrite-port',
+            [
+                'site_id' => 12345
+            ]
+        );
+
+        $result = $this->getEndpoint()->getRewritePort(12345);
+
+        $this->assertIsObject($result);
+        $this->assertObjectHasAttribute('port', $result);
+        $this->assertIsObject($result->port);
+        $this->assertEquals('80', $result->port->from);
+        $this->assertEquals('8080', $result->port->to);
+    }
+
+    public function testSetRewritePort()
+    {
+        $this->setAdapter(
+            'Endpoints/success.json',
+            '/api/prov/v1/sites/performance/rewrite-port/modify',
+            [
+                'site_id' => 12345,
+                'rewrite_port_enabled' => true,
+                'port' => 8080,
+                'rewrite_ssl_port_enabled' => true,
+                'ssl_port' => 444
+            ]
+        );
+
+        $result = $this->getEndpoint()->setRewritePort(12345, true, 8080, true, 444);
+
+        $this->assertIsObject($result);
+    }
+
+    public function testGetErrorPage()
+    {
+        $this->setAdapter(
+            'Endpoints/success.json',
+            '/api/prov/v1/sites/performance/error-page',
+            [
+                'site_id' => 12345
+            ]
+        );
+
+        $result = $this->getEndpoint()->getErrorPage(12345);
+
+        $this->assertIsObject($result);
+    }
+
+    public function testSetErrorPage()
+    {
+        $this->setAdapter(
+            'Endpoints/success.json',
+            '/api/prov/v1/sites/performance/error-page/modify',
+            [
+                'site_id' => 12345,
+                'error_page_template' => '<html><body></body></html>'
+            ]
+        );
+
+        $result = $this->getEndpoint()->setErrorPage(12345, '<html><body></body></html>');
+
+        $this->assertIsObject($result);
     }
 }
