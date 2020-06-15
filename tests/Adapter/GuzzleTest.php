@@ -44,20 +44,7 @@ class GuzzleTest extends \TestCase
         $this->expectException(\Incapsula\API\Adapter\IncapsulaException::class);
         $method->invokeArgs($this->adapter, [$response]);
 
-        $body =
-            '{
-                "res": 0,
-                "res_message": "FAIL",
-                "debug_info": {}
-             }'
-        ;
-        $response = new Response(200, [], $body);
-
-        $this->expectException(\Incapsula\API\Adapter\IncapsulaException::class);
-        $method->invokeArgs($this->adapter, [$response]);
-
-        $body = 'this isnt json.';
-        $response = new Response(200, [], $body);
+        $response = $this->getPsr7JsonResponseForFixture('Adapter/notJson');
 
         $this->expectException(\Incapsula\API\Adapter\JSONException::class);
         $method->invokeArgs($this->adapter, [$response]);
