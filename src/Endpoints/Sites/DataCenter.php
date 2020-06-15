@@ -5,7 +5,7 @@ namespace Incapsula\API\Endpoints\Sites;
 use Incapsula\API\Endpoints\Endpoint;
 
 class DataCenter extends Endpoint
-{   
+{
     public function addDataCenter(
         int $site_id,
         string $name,
@@ -14,18 +14,25 @@ class DataCenter extends Endpoint
         bool $standby = null,
         bool $content = null,
         string $lb_algorithm = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'site_id' => $site_id,
             'name' => $name,
             'server_address' => $address
         ];
 
-        if (isset($enabled)) $options['is_enabled'] = $enabled;
-        if (isset($standby)) $options['is_standby'] = $standby;
-        if (isset($content)) $options['is_content'] = $content;
-        if (isset($lb_algorithm)) $options['lb_algorithm'] = $lb_algorithm;
+        if (isset($enabled)) {
+            $options['is_enabled'] = $enabled;
+        }
+        if (isset($standby)) {
+            $options['is_standby'] = $standby;
+        }
+        if (isset($content)) {
+            $options['is_content'] = $content;
+        }
+        if (isset($lb_algorithm)) {
+            $options['lb_algorithm'] = $lb_algorithm;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/add', $options);
 
@@ -39,16 +46,23 @@ class DataCenter extends Endpoint
         bool $enabled = null,
         bool $standby = null,
         bool $content = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'dc_id' => $dc_id
         ];
 
-        if (isset($name)) $options['name'] = $name;
-        if (isset($enabled)) $options['is_enabled'] = $enabled;
-        if (isset($standby)) $options['is_standby'] = $standby;
-        if (isset($content)) $options['is_content'] = $content;
+        if (isset($name)) {
+            $options['name'] = $name;
+        }
+        if (isset($enabled)) {
+            $options['is_enabled'] = $enabled;
+        }
+        if (isset($standby)) {
+            $options['is_standby'] = $standby;
+        }
+        if (isset($content)) {
+            $options['is_content'] = $content;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/edit', $options);
 
@@ -87,7 +101,9 @@ class DataCenter extends Endpoint
             'server_address' => $address
         ];
 
-        if (isset($standby)) $options['is_standby'] = $standby;
+        if (isset($standby)) {
+            $options['is_standby'] = $standby;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/add', $options);
 
@@ -100,15 +116,20 @@ class DataCenter extends Endpoint
         string $address = null,
         bool $enabled = null,
         bool $standby = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'server_id' => $server_id
         ];
 
-        if (isset($address)) $options['server_address'] = $address;
-        if (isset($enabled)) $options['is_enabled'] = $enabled;
-        if (isset($standby)) $options['is_standby'] = $standby;
+        if (isset($address)) {
+            $options['server_address'] = $address;
+        }
+        if (isset($enabled)) {
+            $options['is_enabled'] = $enabled;
+        }
+        if (isset($standby)) {
+            $options['is_standby'] = $standby;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/edit', $options);
 
@@ -146,7 +167,9 @@ class DataCenter extends Endpoint
             'dc_id' => $dc_id
         ];
 
-        if (isset($origin_pop)) $options['origin_pop'] = $origin_pop;
+        if (isset($origin_pop)) {
+            $options['origin_pop'] = $origin_pop;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/datacenter/origin-pop/modify', $options);
 

@@ -1,0 +1,9 @@
+{
+    "enabled":true,
+    "mode":"CUSTOM",
+    "custom_headers":[
+        "header1",
+        "header2",
+        "header3"
+    ]
+}

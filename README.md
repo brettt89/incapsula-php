@@ -1,6 +1,8 @@
 # Incapsula SDK (v1 API Binding for PHP 7)
 
 [![PHP Composer](https://github.com/brettt89/incapsula-php/workflows/PHP%20Composer/badge.svg?branch=master)](https://github.com/brettt89/incapsula-php)
+[![codecov](https://codecov.io/gh/brettt89/incapsula-php/branch/master/graph/badge.svg)](https://codecov.io/gh/brettt89/incapsula-php)
+
 
 ## Installation
 

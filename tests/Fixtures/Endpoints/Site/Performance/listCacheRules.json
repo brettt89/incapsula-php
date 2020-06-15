@@ -1,0 +1,106 @@
+{
+    "HTTP_CACHE_DIFFERENTIATE_BY_GEO": [
+        {
+            "id": "3750",
+            "hits": "0",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_DIFFERENTIATE_BY_GEO",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_FORCE_UNCACHEABLE": [
+        {
+            "id": "3746",
+            "hits": "0",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_FORCE_UNCACHEABLE",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_FORCE_VALIDATION": [
+        {
+            "id": "3752",
+            "hits": "0",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_FORCE_VALIDATION",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_DIFFERENTIATE_BY_COOKIE": [
+        {
+            "id": "3749",
+            "hits": "0",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_DIFFERENTIATE_BY_COOKIE",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_CLIENT_CACHE_CTL": [
+        {
+            "id": "3745",
+            "hits": "0",
+            "ttlUnit": "HOURS",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_CLIENT_CACHE_CTL",
+            "ttl": "12",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_DIFFERENTIATE_BY_HEADER": [
+        {
+            "id": "3748",
+            "hits": "0",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_DIFFERENTIATE_BY_HEADER",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_DIFFERENTIATE_SSL": [
+        {
+            "id": "3747",
+            "hits": "0",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_DIFFERENTIATE_SSL",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_IGNORE_PARAMS": [
+        {
+            "id": "3751",
+            "hits": "0",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_IGNORE_PARAMS",
+            "params": "firstParam,secondParam",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        },
+        {
+            "id": "3743",
+            "hits": "0",
+            "name": "some name ",
+            "action": "HTTP_CACHE_IGNORE_PARAMS",
+            "params": "firstParam,secondParam",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ],
+    "HTTP_CACHE_MAKE_STATIC": [
+        {
+            "id": "3744",
+            "hits": "0",
+            "ttlUnit": "MINUTES",
+            "name": "some name 1",
+            "action": "HTTP_CACHE_MAKE_STATIC",
+            "ttl": "1",
+            "filter": "URL ==  \"/admin\"",
+            "disabled": "false"
+        }
+    ]
+}

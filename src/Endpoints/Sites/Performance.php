@@ -5,7 +5,7 @@ namespace Incapsula\API\Endpoints\Sites;
 use Incapsula\API\Endpoints\Sites\BaseClass;
 
 class Performance extends BaseClass
-{   
+{
     public function getCacheMode(): string
     {
         $options = [
@@ -28,8 +28,12 @@ class Performance extends BaseClass
             'cache_mode' => $mode
         ];
 
-        if (isset($dyanmic)) $options['dynamic_cache_duration'] = $dyanmic;
-        if (isset($aggressive))  $options['aggressive_cache_duration'] = $aggressive;
+        if (isset($dyanmic)) {
+            $options['dynamic_cache_duration'] = $dyanmic;
+        }
+        if (isset($aggressive)) {
+            $options['aggressive_cache_duration'] = $aggressive;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/cache-mode', $options);
 
@@ -79,16 +83,21 @@ class Performance extends BaseClass
         string $mode = null,
         int $time = null,
         string $time_unit = null
-    ): bool
-    {
+    ): bool {
         $options = [
             'site_id' => $this->getSiteID(),
             'serve_stale_content' => $stale
         ];
 
-        if (isset($mode)) $options['stale_content_mode'] = $mode;
-        if (isset($time)) $options['time'] = $time;
-        if (isset($time_unit)) $options['time_unit'] = $time_unit;
+        if (isset($mode)) {
+            $options['stale_content_mode'] = $mode;
+        }
+        if (isset($time)) {
+            $options['time'] = $time;
+        }
+        if (isset($time_unit)) {
+            $options['time_unit'] = $time_unit;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/stale-content', $options);
 
@@ -112,15 +121,18 @@ class Performance extends BaseClass
         bool $enable,
         int $time = null,
         string $time_unit = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'site_id' => $this->getSiteID(),
             'enabled' => $enable
         ];
 
-        if (isset($time)) $options['time'] = $time;
-        if (isset($time_unit))  $options['time_unit'] = $time_unit;
+        if (isset($time)) {
+            $options['time'] = $time;
+        }
+        if (isset($time_unit)) {
+            $options['time_unit'] = $time_unit;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/cache404/modify', $options);
 
@@ -128,7 +140,7 @@ class Performance extends BaseClass
         return $this->body;
     }
 
-    public function purge(string $url, string $pattern, bool $all_sites = null): bool
+    public function purgeResource(string $url, string $pattern, bool $all_resource = null): bool
     {
         $options = [
             'site_id' => $this->getSiteID(),
@@ -136,7 +148,9 @@ class Performance extends BaseClass
             'resource_pattern' => $pattern
         ];
 
-        if (isset($all_sites)) $options['should_purge_all_site_resources'] = $all_sites;
+        if (isset($all_resource)) {
+            $options['should_purge_all_site_resources'] = $all_resource;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/purge', $options);
 
@@ -168,10 +182,10 @@ class Performance extends BaseClass
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/advanced', $options);
 
         $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->{$param}) && $this->body->debug_info->{$param} == $value);
+        return empty((array) $this->body);
     }
 
-    public function getCachedResponseHeaders(): string
+    public function getCachedResponseHeaders(): \stdClass
     {
         $options = [
             'site_id' => $this->getSiteID()
@@ -180,21 +194,23 @@ class Performance extends BaseClass
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/response-headers/get', $options);
 
         $this->body = json_decode($query->getBody());
-        return $this->body->cache_headers;
+        return $this->body;
     }
 
     public function setCachedResponseHeaders(string $headers, bool $cache_all = null): bool
     {
-        $options = array_merge([
-            'site_id' => $this->getSiteID()
-        ], isset($cache_all) ? $cache_all : [
+        $options = array_merge(isset($cache_all) ? [
+            'cache_all_headers' => $cache_all
+        ] : [
             'cache_headers' => $headers
+        ], [
+            'site_id' => $this->getSiteID()
         ]);
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/response-headers', $options);
 
         $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->cache_headers) && $this->body->debug_info->cache_headers == $headers);
+        return empty((array) $this->body);
     }
 
     public function getTagResponse(): string
@@ -219,22 +235,24 @@ class Performance extends BaseClass
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/tag-response', $options);
 
         $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->header) && $this->body->debug_info->header == $header);
+        return empty((array) $this->body);
     }
 
-    public function addCacheRule(string $name, $rule_options): string
+    public function addCacheRule(string $name, string $action, array $rule_options = []): \stdClass
     {
         $options = array_merge($rule_options, [
-            'site_id' => $this->getSiteID()
+            'site_id' => $this->getSiteID(),
+            'name' => $name,
+            'action' => $action
         ]);
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/add', $options);
 
         $this->body = json_decode($query->getBody());
-        return $this->body->header;
+        return $this->body;
     }
 
-    public function deleteCacheRule(int $rule_id): string
+    public function deleteCacheRule(int $rule_id): bool
     {
         $options = [
             'site_id' => $this->getSiteID(),
@@ -247,7 +265,7 @@ class Performance extends BaseClass
         return empty((array) $this->body);
     }
 
-    public function setCacheRule(int $rule_id, $rule_options): \stdClass
+    public function setCacheRule(int $rule_id, array $rule_options = []): \stdClass
     {
         $options = array_merge($rule_options, [
             'site_id' => $this->getSiteID(),
@@ -274,7 +292,7 @@ class Performance extends BaseClass
         return $this->body;
     }
 
-    public function getListCacheRules($pagination_options = null): \stdClass
+    public function listCacheRules($pagination_options = null): \stdClass
     {
         $options = [ 'site_id' => $this->getSiteID() ];
         $options = isset($pagination_options) ? array_merge($options, $pagination_options) : $options;
@@ -302,16 +320,23 @@ class Performance extends BaseClass
         int $port = null,
         bool $ssl_enabled = null,
         int $ssl_port = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'site_id' => $this->getSiteID()
         ];
 
-        if (isset($enabled)) $options['rewrite_port_enabled'] = $enabled;
-        if (isset($port)) $options['port'] = $port;
-        if (isset($ssl_enabled)) $options['rewrite_ssl_port_enabled'] = $ssl_enabled;
-        if (isset($ssl_port)) $options['ssl_port'] = $ssl_port;
+        if (isset($enabled)) {
+            $options['rewrite_port_enabled'] = $enabled;
+        }
+        if (isset($port)) {
+            $options['port'] = $port;
+        }
+        if (isset($ssl_enabled)) {
+            $options['rewrite_ssl_port_enabled'] = $ssl_enabled;
+        }
+        if (isset($ssl_port)) {
+            $options['ssl_port'] = $ssl_port;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/rewrite-port/modify', $options);
 
@@ -338,7 +363,7 @@ class Performance extends BaseClass
             'error_page_template' => $template
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/error-page', $options);
+        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/error-page/modify', $options);
 
         $this->body = json_decode($query->getBody());
         return $this->body;

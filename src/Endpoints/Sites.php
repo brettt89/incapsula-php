@@ -12,7 +12,9 @@ class Sites extends Endpoint
             'site_id' => $site_id
         ];
 
-        if (isset($tests)) $options['tests'] = $tests;
+        if (isset($tests)) {
+            $options['tests'] = $tests;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/status', $options);
 
@@ -84,8 +86,7 @@ class Sites extends Endpoint
         string $format,
         string $time_range,
         array $time_options = []
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'site_id' => $site_id,
             'report' => $report,
@@ -105,8 +106,12 @@ class Sites extends Endpoint
             'site_id' => $site_id
         ];
 
-        if (isset($pattern)) $options['pattern'] = $pattern;
-        if (isset($tag_names)) $options['tag_names'] = $tag_names;
+        if (isset($pattern)) {
+            $options['pattern'] = $pattern;
+        }
+        if (isset($tag_names)) {
+            $options['tag_names'] = $tag_names;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/cache/purge', $options);
 
@@ -157,15 +162,18 @@ class Sites extends Endpoint
         string $crt_base64,
         string $key_base64 = null,
         string $passphrase = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'site_id' => $site_id,
             'certificate' => $crt_base64
         ];
 
-        if (isset($key_base64)) $options['private_key'] = $key_base64;
-        if (isset($passphrase)) $options['passphrase'] = $passphrase;
+        if (isset($key_base64)) {
+            $options['private_key'] = $key_base64;
+        }
+        if (isset($passphrase)) {
+            $options['passphrase'] = $passphrase;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/upload', $options);
 
@@ -194,18 +202,29 @@ class Sites extends Endpoint
         string $country = null,
         string $state = null,
         string $city = null
-    ): string
-    {
+    ): string {
         $options = [
             'site_id' => $site_id
         ];
 
-        if (isset($email)) $options['email'] = $email;
-        if (isset($org)) $options['organization'] = $org;
-        if (isset($org_unit)) $options['organization_unit'] = $org_unit;
-        if (isset($country)) $options['country'] = $country;
-        if (isset($state)) $options['state'] = $state;
-        if (isset($city)) $options['city'] = $city;
+        if (isset($email)) {
+            $options['email'] = $email;
+        }
+        if (isset($org)) {
+            $options['organization'] = $org;
+        }
+        if (isset($org_unit)) {
+            $options['organization_unit'] = $org_unit;
+        }
+        if (isset($country)) {
+            $options['country'] = $country;
+        }
+        if (isset($state)) {
+            $options['state'] = $state;
+        }
+        if (isset($city)) {
+            $options['city'] = $city;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/csr', $options);
 
@@ -218,8 +237,7 @@ class Sites extends Endpoint
         string $name,
         string $action,
         array $rule_options = []
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = array_merge($rule_options, [
             'site_id' => $site_id,
             'name' => $name,
@@ -236,8 +254,7 @@ class Sites extends Endpoint
         int $rule_id,
         string $action,
         array $rule_options = []
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = array_merge($rule_options, [
             'rule_id' => $rule_id,
             'action' => $action
@@ -279,14 +296,17 @@ class Sites extends Endpoint
         bool $inc_delivery = null,
         bool $inc_incap = null,
         array $pagination_options = []
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = array_merge($pagination_options, [
             'site_id' => $site_id
         ]);
 
-        if (isset($inc_delivery)) $options['include_ad_rules'] = $inc_delivery;
-        if (isset($inc_incap)) $options['include_incap_rules'] = $inc_incap;
+        if (isset($inc_delivery)) {
+            $options['include_ad_rules'] = $inc_delivery;
+        }
+        if (isset($inc_incap)) {
+            $options['include_incap_rules'] = $inc_incap;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/list', $options);
 
@@ -299,14 +319,17 @@ class Sites extends Endpoint
         bool $inc_delivery = null,
         bool $inc_incap = null,
         array $page_options = []
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = array_merge($page_options, [
             'site_id' => $site_id
         ]);
 
-        if (isset($inc_delivery)) $options['include_ad_rules'] = $inc_delivery;
-        if (isset($inc_incap)) $options['include_incap_rules'] = $inc_incap;
+        if (isset($inc_delivery)) {
+            $options['include_ad_rules'] = $inc_delivery;
+        }
+        if (isset($inc_incap)) {
+            $options['include_incap_rules'] = $inc_incap;
+        }
 
         $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/account/list', $options);
 
