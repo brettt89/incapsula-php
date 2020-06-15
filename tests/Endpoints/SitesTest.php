@@ -43,8 +43,14 @@ class SitesTest extends \TestCase implements TestEndpoint
 
     public function testListSites()
     {
-        $this->setAdapter('Endpoints/Site/getSites.json', 'api/prov/v1/sites/list');
-        $sites = $this->getEndpoint()->listSites();
+        $this->setAdapter(
+            'Endpoints/Site/getSites.json',
+            'api/prov/v1/sites/list',
+            [
+                'account_id' => 12345
+            ]
+        );
+        $sites = $this->getEndpoint()->listSites(12345);
 
         $this->assertIsArray($sites);
         $this->assertCount(2, $sites);
@@ -138,6 +144,41 @@ class SitesTest extends \TestCase implements TestEndpoint
         $this->assertEquals('true', $result->support_all_tls_versions);
         $this->assertObjectHasAttribute('new_A_record', $result);
         $this->assertEquals('1.2.3.4', $result->new_A_record);
+    }
+
+    public function testGetReport()
+    {
+        $this->setAdapter(
+            'Endpoints/Site/getReport.json',
+            '/api/prov/v1/sites/report',
+            [
+                'site_id' => 12345,
+                'report' => 'pci-compliance',
+                'format' => 'pdf',
+                'time_range' => 'custom',
+                'start' => '0123456789',
+                'end' => '9876543210'
+            ]
+        );
+
+        $result = $this->getEndpoint()->getReport(
+            12345,
+            'pci-compliance',
+            'pdf',
+            'custom',
+            [
+                'start' => '0123456789',
+                'end' => '9876543210'
+            ]
+        );
+
+        $this->assertIsObject($result);
+
+        $this->assertObjectHasAttribute('report', $result);
+        $this->assertEquals(
+            'JVBERi0xLjUNCiXvv73vv73vv73vv70NCjEgMCBvYmoNCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyAyIDAgUi9MYW5nKGVuLVVT ...',
+            $result->report
+        );
     }
 
     public function testPurgeCache()
@@ -350,11 +391,11 @@ class SitesTest extends \TestCase implements TestEndpoint
         $this->assertIsObject($result);
     }
 
-    public function testListAccountIncapRules()
+    public function testListIncapRules()
     {
         $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/incapRules/account/list',
+            'Endpoints/Site/listIncapRules.json',
+            '/api/prov/v1/sites/incapRules/list',
             [
                 'site_id' => 12345,
                 'include_ad_rules' => true,
@@ -364,10 +405,27 @@ class SitesTest extends \TestCase implements TestEndpoint
             ]
         );
 
-        $result = $this->getEndpoint()->listAccountIncapRules(12345, true, false, [
+        $result = $this->getEndpoint()->listIncapRules(12345, true, false, [
             'page_size' => 100,
             'page_num' => 2
         ]);
+
+        $this->assertIsObject($result);
+    }
+
+    public function testListAccountIncapRules()
+    {
+        $this->setAdapter(
+            'Endpoints/success.json',
+            '/api/prov/v1/sites/incapRules/account/list',
+            [
+                'account_id' => 12345,
+                'include_ad_rules' => true,
+                'include_incap_rules' => false
+            ]
+        );
+
+        $result = $this->getEndpoint()->listAccountIncapRules(12345, true, false);
 
         $this->assertIsObject($result);
     }
@@ -378,13 +436,12 @@ class SitesTest extends \TestCase implements TestEndpoint
             'Endpoints/success.json',
             '/api/prov/v1/sites/incapRules/priority/set',
             [
-                'site_id' => 12345,
                 'rule_id' => 98765,
                 'priority' => 10
             ]
         );
 
-        $result = $this->getEndpoint()->setIncapRulePriority(12345, 98765, 10);
+        $result = $this->getEndpoint()->setIncapRulePriority(98765, 10);
 
         $this->assertIsObject($result);
     }

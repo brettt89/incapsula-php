@@ -22,9 +22,6 @@ abstract class BaseClass extends Endpoint
 
     public function getSiteID(): int
     {
-        if (!isset($this->site_id)) {
-            throw new LogicException('Site Id must be set');
-        }
         return $this->site_id;
     }
 }

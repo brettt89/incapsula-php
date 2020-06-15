@@ -89,6 +89,7 @@ class ConfigureTest extends \TestCase implements TestEndpoint
             [
                 'site_id' => 12345,
                 'rule_id' => 'api.threats.sql_injection',
+                'whitelist_id' => 12345,
                 'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
                 'ips' => '1.2.3.4,192.168.1.1-192.168.1.100,192.168.1.1/24',
                 'countries' => 'GT,VN'
@@ -97,7 +98,7 @@ class ConfigureTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->setWhitelist(
             'api.threats.sql_injection',
-            null,
+            12345,
             [
                 'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
                 'ips' => '1.2.3.4,192.168.1.1-192.168.1.100,192.168.1.1/24',

@@ -87,17 +87,17 @@ class Sites extends Endpoint
         string $time_range,
         array $time_options = []
     ): \stdClass {
-        $options = [
+        $options = array_merge($time_options, [
             'site_id' => $site_id,
             'report' => $report,
             'format' => $format,
             'time_range' => $time_range
-        ];
+        ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/report', $options, $time_options);
+        $query = $this->getAdapter()->request('/api/prov/v1/sites/report', $options);
 
         $this->body = json_decode($query->getBody());
-        return $this->body->debug_info;
+        return $this->body;
     }
 
     public function purgeCache(int $site_id, string $pattern = null, string $tag_names = null): bool
@@ -315,14 +315,13 @@ class Sites extends Endpoint
     }
 
     public function listAccountIncapRules(
-        int $site_id,
+        int $account_id,
         bool $inc_delivery = null,
-        bool $inc_incap = null,
-        array $page_options = []
+        bool $inc_incap = null
     ): \stdClass {
-        $options = array_merge($page_options, [
-            'site_id' => $site_id
-        ]);
+        $options = [
+            'account_id' => $account_id
+        ];
 
         if (isset($inc_delivery)) {
             $options['include_ad_rules'] = $inc_delivery;
@@ -337,10 +336,9 @@ class Sites extends Endpoint
         return $this->body;
     }
 
-    public function setIncapRulePriority(int $site_id, int $rule_id, int $priority): \stdClass
+    public function setIncapRulePriority(int $rule_id, int $priority): \stdClass
     {
         $options = [
-            'site_id' => $site_id,
             'rule_id' => $rule_id,
             'priority' => $priority
         ];

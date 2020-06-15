@@ -107,11 +107,12 @@ class DataCenterTest extends \TestCase implements TestEndpoint
             '/api/prov/v1/sites/dataCenters/servers/add',
             [
                 'dc_id' => 54321,
-                'server_address' => '1.2.3.4'
+                'server_address' => '1.2.3.4',
+                'is_standby' => false
             ]
         );
 
-        $mode = $this->getEndpoint()->addServer(54321, '1.2.3.4');
+        $mode = $this->getEndpoint()->addServer(54321, '1.2.3.4', false);
 
         $this->assertIsObject($mode);
     }
