@@ -19,7 +19,7 @@ class DDoSProtectionTest extends \TestCase implements TestEndpoint
     public function testAddOriginIP()
     {
         $this->setAdapter(
-            'Endpoints/DDosProtection/addOriginIP.json',
+            'Endpoints/DDoSProtection/addOriginIP.json',
             '/api/prov/v1/ddos-protection/edge-ip/add/ip',
             [
                 'origin_ip' => '1.2.3.4',
@@ -45,7 +45,7 @@ class DDoSProtectionTest extends \TestCase implements TestEndpoint
     public function testAddOriginCNAME()
     {
         $this->setAdapter(
-            'Endpoints/DDosProtection/addOriginCNAME.json',
+            'Endpoints/DDoSProtection/addOriginCNAME.json',
             '/api/prov/v1/ddos-protection/edge-ip/add/cname',
             [
                 'cname' => 'imperva.test.com',
@@ -71,7 +71,7 @@ class DDoSProtectionTest extends \TestCase implements TestEndpoint
     public function testAddOriginDNSIP()
     {
         $this->setAdapter(
-            'Endpoints/DDosProtection/addOriginDNSIP.json',
+            'Endpoints/DDoSProtection/addOriginDNSIP.json',
             '/api/prov/v1/ddos-protection/edge-ip/add/dns-with-ip',
             [
                 'dns_name' => 'www.example.com',
@@ -105,7 +105,7 @@ class DDoSProtectionTest extends \TestCase implements TestEndpoint
     public function testAddOriginDNSCNAME()
     {
         $this->setAdapter(
-            'Endpoints/DDosProtection/addOriginDNSCNAME.json',
+            'Endpoints/DDoSProtection/addOriginDNSCNAME.json',
             '/api/prov/v1/ddos-protection/edge-ip/add/dns-with-cname',
             [
                 'dns_name' => 'www.example.com',
