@@ -3,8 +3,6 @@
 namespace Incapsula\API\Adapter;
 
 use Incapsula\API\Interfaces\Adapter;
-use Incapsula\API\Interfaces\Parameter;
-use Incapsula\API\Interfaces\Configuration;
 use Incapsula\API\Parameters\Auth;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
@@ -50,16 +48,7 @@ class Guzzle implements Adapter
 
     private function setOptions(array $options)
     {
-        foreach ($options as $key => $value) {
-            if ($value instanceof Parameter) {
-                $this->body = array_merge($this->body, $value->getRequestParameters());
-                continue;
-            }
-
-            if ($value instanceof Configuration) {
-                $this->body = array_merge($this->body, $value->toArray());
-                continue;
-            }
+        foreach ($options as $value) {
             $this->body = array_merge($this->body, $value);
         }
     }
