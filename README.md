@@ -21,7 +21,7 @@ Each API call is provided via a similarly named function within various classes 
 
 - [x] [Account](https://docs.imperva.com/bundle/cloud-application-security/page/api/accounts-api.htm)
 - [x] [Sites](https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm)
-- [ ] [DDoS Protection](https://docs.imperva.com/bundle/cloud-application-security/page/api/ddos-for-networks.htm) (coming soon)
+- [x] [DDoS Protection](https://docs.imperva.com/bundle/cloud-application-security/page/api/ddos-for-networks.htm)
 - [ ] [Traffic Statistics and Details](https://docs.imperva.com/bundle/cloud-application-security/page/api/traffic-api.htm) (coming soon)
 - [ ] [Login Protect](https://docs.imperva.com/bundle/cloud-application-security/page/api/login-protect-api.htm) (coming soon)
 - [ ] [Integration API](https://docs.imperva.com/bundle/cloud-application-security/page/api/integration-api.htm) (coming soon)
