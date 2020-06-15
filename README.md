@@ -38,5 +38,5 @@ $account    = new Incapsula\API\Endpoints\Account($adapter);
 
 $account_id = 123456;
     
-print_r($account->getStatus($account_id));
+print_r($account->listSites($account_id));
 ```
