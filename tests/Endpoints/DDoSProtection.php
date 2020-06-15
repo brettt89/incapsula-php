@@ -136,6 +136,118 @@ class DDoSProtectionTest extends \TestCase implements TestEndpoint
         $this->assertEquals('imperva.test.com', $result->resolved_cnames[0]);
     }
 
+    public function testSetOriginIP()
+    {
+        $this->setAdapter(
+            'Endpoints/DDoSProtection/addOriginIP.json',
+            '/api/prov/v1/ddos-protection/edge-ip/edit/ip',
+            [
+                'origin_ip' => '1.2.3.4',
+                'edge_ip' => '172.17.14.1'
+            ]
+        );
+
+        $result = $this->getEndpoint()->setOriginIP(
+            '1.2.3.4',
+            '172.17.14.1'
+        );
+
+        $this->assertIsObject($result);
+
+        $this->assertObjectHasAttribute('origin_ip', $result);
+        $this->assertEquals('1.2.3.4', $result->origin_ip);
+        $this->assertObjectHasAttribute('edge_ip', $result);
+        $this->assertEquals('172.17.14.1', $result->edge_ip);
+    }
+
+    public function testSetOriginCNAME()
+    {
+        $this->setAdapter(
+            'Endpoints/DDoSProtection/addOriginCNAME.json',
+            '/api/prov/v1/ddos-protection/edge-ip/edit/cname',
+            [
+                'cname' => 'imperva.test.com',
+                'origin_ip' => '1.2.3.4'
+            ]
+        );
+
+        $result = $this->getEndpoint()->setOriginCNAME(
+            '1.2.3.4',
+            'imperva.test.com'
+        );
+
+        $this->assertIsObject($result);
+
+        $this->assertObjectHasAttribute('cname', $result);
+        $this->assertEquals('imperva.test.com', $result->cname);
+        $this->assertObjectHasAttribute('edge_ip', $result);
+        $this->assertEquals('172.17.14.1', $result->edge_ip);
+    }
+
+    public function testSetOriginDNSIP()
+    {
+        $this->setAdapter(
+            'Endpoints/DDoSProtection/addOriginDNSIP.json',
+            '/api/prov/v1/ddos-protection/edge-ip/edit/dns-with-ip',
+            [
+                'origin_ip' => '1.2.3.4',
+                'dns_name' => 'www.example.com',
+                'edge_ip' => '172.17.14.1',
+                'disable_dns_check' => false
+            ]
+        );
+
+        $result = $this->getEndpoint()->setOriginDNSIP(
+            '1.2.3.4',
+            'www.example.com',
+            '172.17.14.1',
+            false
+        );
+
+        $this->assertIsObject($result);
+
+        $this->assertObjectHasAttribute('origin_ip', $result);
+        $this->assertEquals('157.166.249.10', $result->origin_ip);
+        $this->assertObjectHasAttribute('edge_ip', $result);
+        $this->assertEquals('172.17.14.1', $result->edge_ip);
+
+        $this->assertObjectHasAttribute('resolved_ips', $result);
+        $this->assertIsArray($result->resolved_ips);
+        $this->assertEquals('157.166.226.25', $result->resolved_ips[0]);
+    }
+
+    public function testSetOriginDNSCNAME()
+    {
+        $this->setAdapter(
+            'Endpoints/DDoSProtection/addOriginDNSCNAME.json',
+            '/api/prov/v1/ddos-protection/edge-ip/edit/dns-with-cname',
+            [
+                'cname' => 'imperva.test.com',
+                'dns_name' => 'www.example.com',
+                'edge_ip' => '172.17.14.1',
+                'disable_dns_check' => false
+            ]
+        );
+
+        $result = $this->getEndpoint()->setOriginDNSCNAME(
+            'imperva.test.com',
+            'www.example.com',
+            '172.17.14.1',
+            false
+        );
+
+        $this->assertIsObject($result);
+
+        $this->assertObjectHasAttribute('cname', $result);
+        $this->assertEquals('imperva.test.com', $result->cname);
+        $this->assertObjectHasAttribute('edge_ip', $result);
+        $this->assertEquals('172.17.14.1', $result->edge_ip);
+
+        $this->assertObjectHasAttribute('resolved_cnames', $result);
+        $this->assertIsArray($result->resolved_cnames);
+        $this->assertEquals('imperva.test.com', $result->resolved_cnames[0]);
+    }
+
     public function testEnableHAProtocol()
     {
         $this->setAdapter(
