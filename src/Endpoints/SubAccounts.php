@@ -7,12 +7,10 @@ use Incapsula\API\Configurations\Account as AccountConfig;
 
 class SubAccounts extends Endpoint
 {
-    public function getList(int $account_id = null, Pagination $pagination = null): array
+    public function getList(int $account_id = null, $pagination_options = null): array
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
-        if ($pagination !== null) {
-            $options[] = $pagination;
-        }
+        $options = array_merge($pagination_options, $options);
 
         $query = $this->getAdapter()->request('/api/prov/v1/accounts/listSubAccounts', $options);
 
@@ -20,9 +18,9 @@ class SubAccounts extends Endpoint
         return $this->body->resultList;
     }
     
-    public function add(string $name, AccountConfig $account): \stdClass
+    public function add(string $name, array $account_options = []): \stdClass
     {
-        $options = array_merge($account->toArray(), ['sub_account_name' => $name]);
+        $options = array_merge($account_options, ['sub_account_name' => $name]);
 
         $query = $this->getAdapter()->request('/api/prov/v1/subaccounts/add', $options);
 

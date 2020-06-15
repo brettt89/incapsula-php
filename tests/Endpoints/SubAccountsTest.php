@@ -2,10 +2,9 @@
 
 namespace Incapsula\API\Tests\Endpoints;
 
-use Incapsula\API\Tests\Interfaces\TestConfigure;
 use Incapsula\API\Tests\Interfaces\TestEndpoint;
 
-class SubAccountTest extends \TestCase implements TestConfigure, TestEndpoint
+class SubAccountTest extends \TestCase implements TestEndpoint
 {
     private $endpoint;
 
@@ -17,18 +16,21 @@ class SubAccountTest extends \TestCase implements TestConfigure, TestEndpoint
         return $this->endpoint;
     }
 
-    public function getConfig(): \Incapsula\API\Interfaces\Configuration
+    public function testGetList()
     {
-        if (!isset($this->config)) {
-            $this->config = new \Incapsula\API\Configurations\Account();
-        }
-        return $this->config;
-    }
-
-    public function testGet()
-    {
-        $this->setAdapter('Endpoints/Account/getSubAccounts.json', '/api/prov/v1/accounts/listSubAccounts');
-        $subAccounts = $this->getEndpoint()->getList();
+        $this->setAdapter(
+            'Endpoints/Account/getSubAccounts.json',
+            '/api/prov/v1/accounts/listSubAccounts',
+            [
+                'account_id' => 12345,
+                'page_size' => 100,
+                'page_num' => 2
+            ]
+        );
+        $subAccounts = $this->getEndpoint()->getList(12345, [
+            'page_size' => 100,
+            'page_num' => 2
+        ]);
 
         $this->assertIsArray($subAccounts);
         $this->assertCount(2, $subAccounts);
@@ -45,11 +47,14 @@ class SubAccountTest extends \TestCase implements TestConfigure, TestEndpoint
             'Endpoints/Account/addSubAccount.json',
             '/api/prov/v1/subaccounts/add',
             [
-                'sub_account_name' => 'Sub Account Name'
+                'sub_account_name' => 'Sub Account Name',
+                'user_name' => 'John Doe'
             ]
         );
         
-        $subAccount = $this->getEndpoint()->add('Sub Account Name', $this->getConfig());
+        $subAccount = $this->getEndpoint()->add('Sub Account Name', [
+            'user_name' => 'John Doe'
+        ]);
 
         $this->assertIsObject($subAccount);
 

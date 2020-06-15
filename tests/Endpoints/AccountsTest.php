@@ -2,13 +2,11 @@
 
 namespace Incapsula\API\Tests\Endpoints;
 
-use Incapsula\API\Tests\Interfaces\TestConfigure;
 use Incapsula\API\Tests\Interfaces\TestEndpoint;
 
-class AccountTest extends \TestCase implements TestConfigure, TestEndpoint
+class AccountTest extends \TestCase implements TestEndpoint
 {
     private $endpoint;
-    private $config;
 
     public function getEndpoint(): \Incapsula\API\Interfaces\Endpoint
     {
@@ -16,14 +14,6 @@ class AccountTest extends \TestCase implements TestConfigure, TestEndpoint
             $this->endpoint = new \Incapsula\API\Endpoints\Accounts($this->getAdapter());
         }
         return $this->endpoint;
-    }
-
-    public function getConfig(): \Incapsula\API\Interfaces\Configuration
-    {
-        if (!isset($this->config)) {
-            $this->config = new \Incapsula\API\Configurations\Account();
-        }
-        return $this->config;
     }
 
     //
@@ -95,11 +85,14 @@ class AccountTest extends \TestCase implements TestConfigure, TestEndpoint
             'Endpoints/Account/addAccount.json',
             '/api/prov/v1/accounts/add',
             [
-                'email' => 'demo_account@imperva.com'
+                'email' => 'demo_account@imperva.com',
+                'user_name' => 'John Doe'
             ]
         );
 
-        $account = $this->getEndpoint()->add('demo_account@imperva.com', $this->getConfig());
+        $account = $this->getEndpoint()->add('demo_account@imperva.com', [
+            'user_name' => 'John Doe'
+        ]);
 
         $this->assertIsObject($account);
 

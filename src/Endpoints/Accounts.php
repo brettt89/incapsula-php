@@ -2,9 +2,6 @@
 
 namespace Incapsula\API\Endpoints;
 
-use Incapsula\API\Parameters\Pagination;
-use Incapsula\API\Configurations\Account as AccountConfig;
-
 class Accounts extends Endpoint
 {
     public function getStatus(int $account_id = null): \stdClass
@@ -41,12 +38,10 @@ class Accounts extends Endpoint
     // Managed Accounts
     //
 
-    public function getList(int $account_id = null, Pagination $pagination = null): array
+    public function getList(int $account_id = null, array $pagination_options = []): array
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
-        if ($pagination !== null) {
-            $options[] = $pagination;
-        }
+        $options = array_merge($pagination_options, $options);
 
         $query = $this->getAdapter()->request('/api/prov/v1/accounts/list', $options);
 
@@ -54,9 +49,9 @@ class Accounts extends Endpoint
         return $this->body->accounts;
     }
 
-    public function add(string $email, AccountConfig $account): \stdClass
+    public function add(string $email, array $account_options = []): \stdClass
     {
-        $options = array_merge($account->toArray(), ['email' => $email]);
+        $options = array_merge($account_options, ['email' => $email]);
 
         $query = $this->getAdapter()->request('/api/prov/v1/accounts/add', $options);
 
