@@ -53,18 +53,20 @@ class DataCentersTest extends \TestCase implements TestEndpoint
             [
                 'dc_id' => 54321,
                 'name' => 'testName',
-                'is_enabled' => true,
-                'is_standby' => false,
-                'is_content' => true,
+                'is_enabled' => 'true',
+                'is_standby' => 'false',
+                'is_content' => 'true',
             ]
         );
 
         $mode = $this->getEndpoint()->editDataCenter(
             54321,
-            'testName',
-            true,
-            false,
-            true
+            [
+                'name' => 'testName',
+                'is_enabled' => 'true',
+                'is_standby' => 'false',
+                'is_content' => 'true'
+            ]
         );
 
         $this->assertIsObject($mode);
@@ -82,7 +84,7 @@ class DataCentersTest extends \TestCase implements TestEndpoint
 
         $mode = $this->getEndpoint()->resumeDataCenterTraffic(12345);
 
-        $this->assertIsObject($mode);
+        $this->assertTrue($mode);
     }
 
     public function testDeleteDataCenter()
@@ -125,12 +127,19 @@ class DataCentersTest extends \TestCase implements TestEndpoint
             [
                 'server_id' => 98765,
                 'server_address' => '4.3.2.1',
-                'is_enabled' => true,
-                'is_standby' => false
+                'is_enabled' => 'true',
+                'is_standby' => 'false'
             ]
         );
 
-        $mode = $this->getEndpoint()->editServer(98765, '4.3.2.1', true, false);
+        $mode = $this->getEndpoint()->editServer(
+            98765,
+            [
+                'server_address' => '4.3.2.1',
+                'is_enabled' => 'true',
+                'is_standby' => 'false'
+            ]
+        );
 
         $this->assertIsObject($mode);
     }
@@ -165,7 +174,7 @@ class DataCentersTest extends \TestCase implements TestEndpoint
         $this->assertIsObject($mode);
     }
 
-    public function testGDataCenterOriginPOP()
+    public function testDataCenterOriginPOP()
     {
         $this->setAdapter(
             'Endpoints/success.json',
@@ -178,7 +187,7 @@ class DataCentersTest extends \TestCase implements TestEndpoint
 
         $mode = $this->getEndpoint()->setDataCenterOriginPOP(54321, 'AP');
 
-        $this->assertIsObject($mode);
+        $this->assertTrue($mode);
     }
 
     public function testGetDataCenterRecommendedOriginPOP()
