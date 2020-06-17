@@ -56,7 +56,7 @@ class RulesTest extends \TestCase implements TestEndpoint
             'response_code' => 312
         ]);
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testEnableDisableIncapRule()
@@ -66,13 +66,13 @@ class RulesTest extends \TestCase implements TestEndpoint
             '/api/prov/v1/sites/incapRules/enableDisable',
             [
                 'rule_id' => 98765,
-                'enabled' => false
+                'enable' => 'false'
             ]
         );
 
         $result = $this->getEndpoint()->enableDisableIncapRule(98765, false);
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testDelteIncapRule()

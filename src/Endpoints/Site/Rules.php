@@ -18,9 +18,7 @@ class Rules extends Endpoint
             'action' => $action
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/add', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/add', $options);
         return $this->body;
     }
 
@@ -28,29 +26,25 @@ class Rules extends Endpoint
         int $rule_id,
         string $action,
         array $rule_options = []
-    ): \stdClass {
+    ): bool {
         $options = array_merge($rule_options, [
             'rule_id' => $rule_id,
             'action' => $action
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/edit', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/edit', $options);
+        return empty((array) $this->body);
     }
 
-    public function enableDisableIncapRule(int $rule_id, bool $enable): \stdClass
+    public function enableDisableIncapRule(int $rule_id, bool $enable): bool
     {
         $options = [
             'rule_id' => $rule_id,
-            'enabled' => $enable
+            'enable' => $enable ? 'true' : 'false'
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/enableDisable', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/enableDisable', $options);
+        return empty((array) $this->body);
     }
 
     public function deleteIncapRule(int $rule_id): \stdClass
@@ -59,9 +53,7 @@ class Rules extends Endpoint
             'rule_id' => $rule_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/delete', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/delete', $options);
         return $this->body;
     }
 
@@ -82,12 +74,11 @@ class Rules extends Endpoint
             $options['include_incap_rules'] = $inc_incap;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/list', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/list', $options);
         return $this->body;
     }
 
+    // @todo Incapsula Error - Disabled
     public function listAccountIncapRules(
         int $account_id,
         bool $inc_delivery = null,
@@ -104,9 +95,7 @@ class Rules extends Endpoint
             $options['include_incap_rules'] = $inc_incap;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/account/list', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/account/list', $options);
         return $this->body;
     }
 
@@ -117,9 +106,7 @@ class Rules extends Endpoint
             'priority' => $priority
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/priority/set', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/priority/set', $options);
         return $this->body;
     }
 }
