@@ -41,9 +41,6 @@ abstract class TestCase extends BaseTestCase
     {
         $stream = $this->getPsr7StreamForFixture($fixture);
 
-        $this->assertNotNull(json_decode($stream));
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
-
         return new Psr7\Response($statusCode, ['Content-Type' => 'application/json'], $stream);
     }
     

@@ -27,7 +27,7 @@ class GuzzleTest extends \TestCase
         $this->assertEquals('Test2', $response->json->{'X-Another-Test'});
     }
 
-    public function testCheckErrors()
+    public function testIncapsulaException()
     {
         $class = new \ReflectionClass(\Incapsula\API\Adapter\Guzzle::class);
         $method = $class->getMethod('checkError');
@@ -37,10 +37,34 @@ class GuzzleTest extends \TestCase
 
         $this->expectException(\Incapsula\API\Adapter\IncapsulaException::class);
         $method->invokeArgs($this->adapter, [$response]);
+        $response = $this->adapter->getDebugInfo();
+    }
+
+    public function testJSONException()
+    {
+        $class = new \ReflectionClass(\Incapsula\API\Adapter\Guzzle::class);
+        $method = $class->getMethod('checkError');
+        $method->setAccessible(true);
 
         $response = $this->getPsr7JsonResponseForFixture('Adapter/notJson');
 
         $this->expectException(\Incapsula\API\Adapter\JSONException::class);
         $method->invokeArgs($this->adapter, [$response]);
+    }
+
+    public function testGetDebugInfo()
+    {
+        $class = new \ReflectionClass(\Incapsula\API\Adapter\Guzzle::class);
+        $property = $class->getProperty('debug_info');
+        $property->setAccessible(true);
+
+        $response = $this->getPsr7JsonResponseForFixture('Adapter/errorResponse.json');
+        $property->setValue($this->adapter, json_decode($response->getBody()));
+
+        $result = $this->adapter->getDebugInfo();
+        
+        $this->assertIsObject($result);
+        $this->assertObjectHasAttribute('debug_info', $result);
+        $this->assertEquals('Site has no valid DNS records', $result->debug_info->problem);
     }
 }

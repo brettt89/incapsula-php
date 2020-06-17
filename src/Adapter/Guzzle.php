@@ -13,7 +13,7 @@ class Guzzle implements Adapter
     private $client;
     private $body;
     private $debug=false;
-    private $debugInfo;
+    private $debug_info;
 
     /**
      * @inheritDoc
@@ -83,8 +83,8 @@ class Guzzle implements Adapter
                 $message = "{$json->res_message},";
 
                 if (isset($json->debug_info)) {
-                    $debug_info = json_encode($json->debug_info);
-                    $message = "{$json->res_message}: {$debug_info},";
+                    $this->debug_info = $json->debug_info;
+                    $message = "{$json->res_message}: {" . json_encode($this->debug_info) . "},";
                 }
             }
 
@@ -94,6 +94,6 @@ class Guzzle implements Adapter
 
     public function getDebugInfo()
     {
-        return $this->debugInfo;
+        return $this->debug_info;
     }
 }
