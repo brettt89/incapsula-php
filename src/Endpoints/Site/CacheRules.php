@@ -6,7 +6,7 @@ use Incapsula\API\Endpoint;
 
 class CacheRules extends Endpoint
 {   
-    public function addCacheRule(int $site_id, string $name, string $action, array $rule_options = []): \stdClass
+    public function addCacheRule(int $site_id, string $name, string $action, array $rule_options = []): int
     {
         $options = array_merge($rule_options, [
             'site_id' => $site_id,
@@ -14,10 +14,8 @@ class CacheRules extends Endpoint
             'action' => $action
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/add', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/add', $options);
+        return $this->body->rule_id;
     }
 
     public function deleteCacheRule(int $site_id, int $rule_id): bool
@@ -27,48 +25,40 @@ class CacheRules extends Endpoint
             'rule_id' => $rule_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/delete', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/delete', $options);
         return empty((array) $this->body);
     }
 
-    public function setCacheRule(int $site_id, int $rule_id, array $rule_options = []): \stdClass
+    public function setCacheRule(int $site_id, int $rule_id, array $rule_options = []): bool
     {
         $options = array_merge($rule_options, [
             'site_id' => $site_id,
             'rule_id' => $rule_id
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/edit', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/edit', $options);
+        return empty((array) $this->body);
     }
 
-    public function enableCacheRule(int $site_id, int $rule_id, bool $enabled): \stdClass
+    public function enableCacheRule(int $site_id, int $rule_id, bool $enabled): bool
     {
         $options = [
             'site_id' => $site_id,
             'rule_id' => $rule_id,
-            'enable' => $enabled
+            'enable' => $enabled ? 'true' : 'false'
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/enable', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/enable', $options);
+        return empty((array) $this->body);
     }
 
-    public function listCacheRules(int $site_id, $pagination_options = null): \stdClass
+    public function listCacheRules(int $site_id, $pagination_options = []): \stdClass
     {
         $options = array_merge($pagination_options, [
             'site_id' => $site_id
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/list', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/caching-rules/list', $options);
         return $this->body;
     }
 }
