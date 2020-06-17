@@ -5,6 +5,7 @@ namespace Incapsula\API\Adapter;
 use Incapsula\API\Interfaces\Adapter;
 use Incapsula\API\Parameters\Auth;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 
 class Guzzle implements Adapter
@@ -40,7 +41,7 @@ class Guzzle implements Adapter
         }
 
         $response = $this->client->request('POST', $uri, [
-            'form_params' => $this->body,
+            RequestOptions::JSON => $this->body,
         ]);
 
         return $this->parseResponse($response);
@@ -79,15 +80,11 @@ class Guzzle implements Adapter
             $message = "An unknown error has occurred.";
 
             if (isset($json->res_message)) {
-                $message = "{$json->res_message}";
+                $message = "{$json->res_message},";
 
-                if (isset($json->debug_info->problem)) {
-                    $message = "{$json->res_message}: {$json->debug_info->problem}";
-
-                    if (isset($json->debug_info->{'id-info'})) {
-                        $infoID = $json->debug_info->{'id-info'};
-                        $message = "{$json->res_message}: [$infoID]{$json->debug_info->problem}";
-                    }
+                if (isset($json->debug_info)) {
+                    $debug_info = json_encode($json->debug_info);
+                    $message = "{$json->res_message}: {$debug_info},";
                 }
             }
 

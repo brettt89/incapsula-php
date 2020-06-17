@@ -19,16 +19,12 @@ class GuzzleTest extends \TestCase
     {
         $response = $this->adapter->request('https://httpbin.org/post');
 
-        $headers = $response->getHeaders();
-        $this->assertEquals('application/json', $headers['Content-Type'][0]);
-
-        $body = json_decode($response->getBody());
-        $this->assertEquals('Test', $body->form->{'X-Testing'});
+        $this->assertEquals('application/json', $response->headers->{"Content-Type"});
+        $this->assertEquals('Test', $response->json->{'X-Testing'});
 
         $response = $this->adapter->request('https://httpbin.org/post', ['X-Another-Test' => 'Test2']);
 
-        $body = json_decode($response->getBody());
-        $this->assertEquals('Test2', $body->form->{'X-Another-Test'});
+        $this->assertEquals('Test2', $response->json->{'X-Another-Test'});
     }
 
     public function testCheckErrors()
