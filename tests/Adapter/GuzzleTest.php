@@ -2,8 +2,6 @@
 
 namespace Incapsula\API\Tests\Adapter;
 
-use GuzzleHttp\Psr7\Response;
-
 class GuzzleTest extends \TestCase
 {
     private $client;
@@ -33,7 +31,7 @@ class GuzzleTest extends \TestCase
         $this->assertEquals('Test2', $body->form->{'X-Another-Test'});
     }
 
-    public function testErrors()
+    public function testCheckErrors()
     {
         $class = new \ReflectionClass(\Incapsula\API\Adapter\Guzzle::class);
         $method = $class->getMethod('checkError');

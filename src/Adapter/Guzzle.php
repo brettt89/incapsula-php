@@ -29,21 +29,17 @@ class Guzzle implements Adapter
         ]);
     }
 
-    public function request(string $uri, ...$options): ResponseInterface
+    public function request(string $uri, ...$options): \stdClass
     {
         if (isset($options)) {
             $this->setOptions($options);
         }
-        
+
         $response = $this->client->request('POST', $uri, [
             'form_params' => $this->body,
         ]);
 
-        $this->checkError($response);
-
-        unset($response->res, $response->res_message);
-
-        return $response;
+        return $this->parseResponse($response);
     }
 
     private function setOptions(array $options)
@@ -51,6 +47,19 @@ class Guzzle implements Adapter
         foreach ($options as $value) {
             $this->body = array_merge($this->body, $value);
         }
+    }
+
+    private function parseResponse(ResponseInterface $response): \stdClass
+    {
+        $this->checkError($response);
+        
+        $object = json_decode($response->getBody());
+
+        // Cleanup
+        unset($object->res, $object->res_message);
+        if empty($object->debug_info) unset($object->debug_info);
+        
+        return $object;
     }
 
     private function checkError(ResponseInterface $response)

@@ -2,7 +2,7 @@
 
 namespace Incapsula\API\Interfaces;
 
-use Incapsula\API\Adapter\Adapter;
+use Incapsula\API\Interfaces\Adapter;
 
 interface Endpoint
 {
