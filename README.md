@@ -17,7 +17,7 @@ $ composer require brettt89/incapsula-sdk dev-master
 ## Incapsula API version 1
 
 The Incapsula API can be found [here](https://docs.imperva.com/bundle/cloud-application-security/page/api/api.htm).
-Each API call is provided via a similarly named function within various classes in the **Incapsula\API\Endpoints** namespace:
+Each API call is provided via a similarly named function within various classes in the **Incapsula\API** namespace:
 
 - [x] [Account](https://docs.imperva.com/bundle/cloud-application-security/page/api/accounts-api.htm)
 - [x] [Sites](https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm)
@@ -32,9 +32,9 @@ Note that this repository is currently under development, additional classes and
 ## Getting Started
 
 ```php
-$key        = new Incapsula\API\Parameters\Auth('Api-ID', 'Api-Key');
-$adapter    = new Incapsula\API\Adapter\Guzzle($key);
-$account    = new Incapsula\API\Endpoints\Account($adapter);
+$key        = new Incapsula\API\Auth('Api-ID', 'Api-Key');
+$adapter    = new Incapsula\API\Guzzle($key);
+$account    = new Incapsula\API\Account($adapter);
 
 $account_id = 123456;
     
