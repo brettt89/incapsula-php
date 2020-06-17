@@ -6,13 +6,15 @@ use Incapsula\API\Endpoint;
 
 class Account extends Endpoint
 {
+    // Account Controls
+    // Manual Testing completed (Success)
+    //
+    
     public function getStatus(int $account_id = null): \stdClass
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/account', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/account', $options);
         return $this->body->account;
     }
 
@@ -20,9 +22,7 @@ class Account extends Endpoint
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/gettoken', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/gettoken', $options);
         return $this->body->generated_token;
     }
 
@@ -30,14 +30,13 @@ class Account extends Endpoint
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/subscription', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/subscription', $options);
         return $this->body;
     }
 
     //
     // Managed Accounts
+    // @todo Manual Testing required (Account features disabled)
     //
 
     public function listManagedAccounts(int $account_id = null, array $pagination_options = []): array
@@ -45,9 +44,7 @@ class Account extends Endpoint
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
         $options = array_merge($pagination_options, $options);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/list', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/list', $options);
         return $this->body->accounts;
     }
 
@@ -55,9 +52,7 @@ class Account extends Endpoint
     {
         $options = array_merge($account_options, ['email' => $email]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/add', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/add', $options);
         return $this->body->account;
     }
 
@@ -67,24 +62,21 @@ class Account extends Endpoint
             'account_id' => $account_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/delete', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/delete', $options);
         return true;
     }
 
     //
     // Sub Accounts
+    // Manual Testing completed (Success)
     //
 
-    public function listSubAccounts(int $account_id = null, $pagination_options = null): array
+    public function listSubAccounts(int $account_id = null, $pagination_options = []): array
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
         $options = array_merge($pagination_options, $options);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/listSubAccounts', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/listSubAccounts', $options);
         return $this->body->resultList;
     }
     
@@ -92,9 +84,7 @@ class Account extends Endpoint
     {
         $options = array_merge($account_options, ['sub_account_name' => $name]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/subaccounts/add', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/subaccounts/add', $options);
         return $this->body->sub_account;
     }
 
@@ -104,14 +94,13 @@ class Account extends Endpoint
             'sub_account_id' => $sub_account_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/subaccounts/delete', $options);
-
-        $this->body = json_decode($query->getBody());
-        return true;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/subaccounts/delete', $options);
+        return empty((array) $this->body);
     }
 
     //
-    // Logs
+    // Logging Addon
+    // @todo Manual Testing required (Feature not enabled)
     //
 
     public function setLogLevel(int $account_id, string $level): bool
@@ -121,10 +110,8 @@ class Account extends Endpoint
             'log_level' => $level
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/setlog', $options);
-
-        $this->body = json_decode($query->getBody());
-        return true;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/setlog', $options);
+        return (isset($this->body->debug_info->log_level) && $this->body->debug_info->log_level == $level);
     }
 
     public function testS3Connection(
@@ -133,7 +120,7 @@ class Account extends Endpoint
         string $access_key,
         string $secret_key,
         bool $save_on_success = false
-    ): bool {
+    ) {
         $options = [
             'account_id' => $account_id,
             'bucket_name' => $bucket_name,
@@ -142,10 +129,8 @@ class Account extends Endpoint
             'save_on_success' => $save_on_success
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/testS3Connection', $options);
-
-        $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->message) && $this->body->debug_info->message == 'Connection test succeeded');
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/testS3Connection', $options);
+        return $this->body;
     }
 
     public function testSFTPConnection(
@@ -155,7 +140,7 @@ class Account extends Endpoint
         string $password,
         string $destination_folder,
         bool $save_on_success = false
-    ): bool {
+    ) {
         $options = [
             'account_id' => $account_id,
             'host' => $host,
@@ -165,10 +150,8 @@ class Account extends Endpoint
             'save_on_success' => $save_on_success
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/testSftpConnection', $options);
-
-        $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->message) && $this->body->debug_info->message == 'Connection test succeeded');
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/testSftpConnection', $options);
+        return $this->body;
     }
 
     public function setAmazomSiemStorage(
@@ -176,7 +159,7 @@ class Account extends Endpoint
         string $bucket_name,
         string $access_key,
         string $secret_key
-    ): bool {
+    ): \stdClass {
         $options = [
             'account_id' => $account_id,
             'bucket_name' => $bucket_name,
@@ -184,10 +167,8 @@ class Account extends Endpoint
             'secret_key' => $secret_key
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/setAmazonSiemStorage', $options);
-
-        $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->message) && $this->body->debug_info->message == 'Configuration was successfully updated');
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/setAmazonSiemStorage', $options);
+        return $this->body;
     }
 
     public function setSFTPSiemStorage(
@@ -196,7 +177,7 @@ class Account extends Endpoint
         string $user_name,
         string $password,
         string $destination_folder
-    ): bool {
+    ): \stdClass {
         $options = [
             'account_id' => $account_id,
             'host' => $host,
@@ -205,10 +186,8 @@ class Account extends Endpoint
             'destination_folder' => $destination_folder
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/setSftpSiemStorage', $options);
-
-        $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->message) && $this->body->debug_info->message == 'Configuration was successfully updated');
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/setSftpSiemStorage', $options);
+        return $this->body;
     }
 
     public function setDefaultSiemStorage(int $account_id): bool
@@ -217,12 +196,16 @@ class Account extends Endpoint
             'account_id' => $account_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/setDefaultSiemStorage', $options);
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/setDefaultSiemStorage', $options);
 
-        $this->body = json_decode($query->getBody());
         return (isset($this->body->debug_info->message) && $this->body->debug_info->message == 'Configuration was successfully updated');
     }
-    
+
+    //
+    // Configuration
+    // Manual Testing completed (Success)
+    //
+
     public function setConfig(int $account_id, string $param, $value): bool
     {
         $options = [
@@ -231,10 +214,8 @@ class Account extends Endpoint
             'value' => $value
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/configure', $options);
-
-        $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->{$param}) && $this->body->debug_info->{$param} == $value);
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/configure', $options);
+        return empty((array) $this->body);
     }
     
     public function getDefaultStorageRegion(int $account_id): string
@@ -243,9 +224,7 @@ class Account extends Endpoint
             'account_id' => $account_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/data-privacy/show', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/data-privacy/show', $options);
         return $this->body->region;
     }
 
@@ -253,12 +232,10 @@ class Account extends Endpoint
     {
         $options = [
             'account_id' => $account_id,
-            'region' => $region
+            'data_storage_region' => $region
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/accounts/data-privacy/set-region-default', $options);
-
-        $this->body = json_decode($query->getBody());
-        return empty((array) $this->body);
+        $this->body = $this->getAdapter()->request('/api/prov/v1/accounts/data-privacy/set-region-default', $options);
+        return (isset($this->body->region) && $this->body->region == $region);
     }
 }

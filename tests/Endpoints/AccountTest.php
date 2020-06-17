@@ -64,7 +64,7 @@ class AccountTest extends \TestCase implements TestEndpoint
     public function testSetConfig()
     {
         $this->setAdapter(
-            'Endpoints/Account/setConfiguration.json',
+            'Endpoints/success.json',
             '/api/prov/v1/accounts/configure',
             [
                 'account_id' => 12345,
@@ -247,7 +247,7 @@ class AccountTest extends \TestCase implements TestEndpoint
             true
         );
 
-        $this->assertTrue($result);
+        $this->assertIsObject($result);
     }
 
     public function testTestSFTPConnection()
@@ -274,7 +274,7 @@ class AccountTest extends \TestCase implements TestEndpoint
             true
         );
 
-        $this->assertTrue($result);
+        $this->assertIsObject($result);
     }
 
     public function testSetAmazonSiemStorage()
@@ -297,7 +297,7 @@ class AccountTest extends \TestCase implements TestEndpoint
             'Test-Secret-Key'
         );
 
-        $this->assertTrue($result);
+        $this->assertIsObject($result);
     }
 
     public function testSetSFTPSiemStorage()
@@ -322,7 +322,7 @@ class AccountTest extends \TestCase implements TestEndpoint
             '/test/destination'
         );
 
-        $this->assertTrue($result);
+        $this->assertIsObject($result);
     }
 
     public function testSetDefaultSiemStorage()
@@ -358,11 +358,11 @@ class AccountTest extends \TestCase implements TestEndpoint
     public function testSetDefaultStorageRegion()
     {
         $this->setAdapter(
-            'Endpoints/success.json',
+            'Endpoints/Account/getDataStorageRegion.json',
             '/api/prov/v1/accounts/data-privacy/set-region-default',
             [
                 'account_id' => 12345,
-                'region' => 'EU'
+                'data_storage_region' => 'EU'
             ]
         );
 

@@ -3,7 +3,7 @@
 namespace Incapsula\API;
 
 use Incapsula\API\Interfaces\Endpoint as EndpointInterface;
-use Incapsula\API\Adapter\Adapter;
+use Incapsula\API\Interfaces\Adapter;
 use Incapsula\API\Traits\APITrait;
 
 abstract class Endpoint implements EndpointInterface

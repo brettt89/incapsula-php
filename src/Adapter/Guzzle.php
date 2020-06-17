@@ -5,45 +5,46 @@ namespace Incapsula\API\Adapter;
 use Incapsula\API\Interfaces\Adapter;
 use Incapsula\API\Parameters\Auth;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 
 class Guzzle implements Adapter
 {
     private $client;
     private $body;
+    private $debug=false;
+    private $debug_info;
 
     /**
      * @inheritDoc
      */
-    public function __construct(Auth $auth, string $baseURI = null)
+    public function __construct(Auth $auth, string $baseURI = null, bool $debug = false)
     {
         if ($baseURI === null) {
             $baseURI = 'https://my.incapsula.com/';
         }
 
+        $this->debug = $debug;
+
         $this->body = $auth->getRequestParameters();
         $this->client = new Client([
             'base_uri' => $baseURI,
             'Accept' => 'application/json',
-            'timeout'  => 30.0
+            'timeout'  => 60.0
         ]);
     }
 
-    public function request(string $uri, ...$options): ResponseInterface
+    public function request(string $uri, ...$options): \stdClass
     {
         if (isset($options)) {
             $this->setOptions($options);
         }
-        
+
         $response = $this->client->request('POST', $uri, [
-            'form_params' => $this->body,
+            RequestOptions::JSON => $this->body,
         ]);
 
-        $this->checkError($response);
-
-        unset($response->res, $response->res_message);
-
-        return $response;
+        return $this->parseResponse($response);
     }
 
     private function setOptions(array $options)
@@ -51,6 +52,20 @@ class Guzzle implements Adapter
         foreach ($options as $value) {
             $this->body = array_merge($this->body, $value);
         }
+    }
+
+    private function parseResponse(ResponseInterface $response): \stdClass
+    {
+        $this->checkError($response);
+        
+        $object = json_decode($response->getBody());
+
+        // Cleanup
+        if ($this->debug) $this->debugInfo = $object->debug_info;
+        unset($object->res, $object->res_message);
+        unset($object->debug_info);
+        
+        return $object;
     }
 
     private function checkError(ResponseInterface $response)
@@ -65,19 +80,20 @@ class Guzzle implements Adapter
             $message = "An unknown error has occurred.";
 
             if (isset($json->res_message)) {
-                $message = "{$json->res_message}";
+                $message = "{$json->res_message},";
 
-                if (isset($json->debug_info->problem)) {
-                    $message = "{$json->res_message}: {$json->debug_info->problem}";
-
-                    if (isset($json->debug_info->{'id-info'})) {
-                        $infoID = $json->debug_info->{'id-info'};
-                        $message = "{$json->res_message}: [$infoID]{$json->debug_info->problem}";
-                    }
+                if (isset($json->debug_info)) {
+                    $this->debug_info = $json->debug_info;
+                    $message = "{$json->res_message}: {" . json_encode($this->debug_info) . "},";
                 }
             }
 
             throw new IncapsulaException($message, $json->res);
         }
+    }
+
+    public function getDebugInfo()
+    {
+        return $this->debug_info;
     }
 }

@@ -4,6 +4,7 @@ namespace Incapsula\API\Endpoints;
 
 use Incapsula\API\Endpoint;
 
+// @todo - Error from Incapsula - "Operation not allowed"
 class DDoSProtection extends Endpoint
 {
     public function addOriginIP(
@@ -19,9 +20,7 @@ class DDoSProtection extends Endpoint
 
         if (isset($description)) $options['description'] = $description;
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/ip', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/ip', $options);
         return $this->body;
     }
 
@@ -38,9 +37,7 @@ class DDoSProtection extends Endpoint
 
         if (isset($description)) $options['description'] = $description;
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/cname', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/cname', $options);
         return $this->body;
     }
 
@@ -61,9 +58,7 @@ class DDoSProtection extends Endpoint
 
         if (isset($description)) $options['description'] = $description;
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/dns-with-ip', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/dns-with-ip', $options);
         return $this->body;
     }
 
@@ -84,9 +79,7 @@ class DDoSProtection extends Endpoint
 
         if (isset($description)) $options['description'] = $description;
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/dns-with-cname', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/dns-with-cname', $options);
         return $this->body;
     }
 
@@ -100,9 +93,7 @@ class DDoSProtection extends Endpoint
             'edge_ip' => $edge_ip
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/ip', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/ip', $options);
         return $this->body;
     }
 
@@ -116,9 +107,7 @@ class DDoSProtection extends Endpoint
             'cname' => $cname
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/cname', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/cname', $options);
         return $this->body;
     }
 
@@ -136,9 +125,7 @@ class DDoSProtection extends Endpoint
             'disable_dns_check' => $disable_dns_check
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/dns-with-ip', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/dns-with-ip', $options);
         return $this->body;
     }
 
@@ -156,9 +143,7 @@ class DDoSProtection extends Endpoint
             'disable_dns_check' => $disable_dns_check
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/dns-with-cname', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/dns-with-cname', $options);
         return $this->body;
     }
 
@@ -169,9 +154,7 @@ class DDoSProtection extends Endpoint
             'enable_ha_protocol' => $enable_ha_protocol
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/ha-protocol', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/ha-protocol', $options);
         return empty((array) $this->body);
     }
 
@@ -181,9 +164,7 @@ class DDoSProtection extends Endpoint
             'edge_ip' => $edge_ip
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/remove', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/remove', $options);
         return empty((array) $this->body);
     }
 }

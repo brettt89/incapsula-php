@@ -34,52 +34,30 @@ class DataCenters extends Endpoint
             $options['lb_algorithm'] = $lb_algorithm;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/add', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/add', $options);
         return $this->body;
     }
 
     public function editDataCenter(
         int $dc_id,
-        string $name = null,
-        bool $enabled = null,
-        bool $standby = null,
-        bool $content = null
+        array $options = []
     ): \stdClass {
-        $options = [
+        $options = array_merge($options, [
             'dc_id' => $dc_id
-        ];
+        ]);
 
-        if (isset($name)) {
-            $options['name'] = $name;
-        }
-        if (isset($enabled)) {
-            $options['is_enabled'] = $enabled;
-        }
-        if (isset($standby)) {
-            $options['is_standby'] = $standby;
-        }
-        if (isset($content)) {
-            $options['is_content'] = $content;
-        }
-
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/edit', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/edit', $options);
         return $this->body;
     }
 
-    public function resumeDataCenterTraffic(int $site_id): \stdClass
+    public function resumeDataCenterTraffic(int $site_id): bool
     {
         $options = [
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/resume', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/resume', $options);
+        return empty((array) $this->body);
     }
 
     public function deleteDataCenter(int $dc_id): \stdClass
@@ -88,9 +66,7 @@ class DataCenters extends Endpoint
             'dc_id' => $dc_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/delete', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/delete', $options);
         return $this->body;
     }
 
@@ -105,35 +81,19 @@ class DataCenters extends Endpoint
             $options['is_standby'] = $standby;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/add', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/add', $options);
         return $this->body;
     }
 
     public function editServer(
         int $server_id,
-        string $address = null,
-        bool $enabled = null,
-        bool $standby = null
+        array $options
     ): \stdClass {
-        $options = [
+        $options = array_merge($options, [
             'server_id' => $server_id
-        ];
+        ]);
 
-        if (isset($address)) {
-            $options['server_address'] = $address;
-        }
-        if (isset($enabled)) {
-            $options['is_enabled'] = $enabled;
-        }
-        if (isset($standby)) {
-            $options['is_standby'] = $standby;
-        }
-
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/edit', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/edit', $options);
         return $this->body;
     }
 
@@ -143,9 +103,7 @@ class DataCenters extends Endpoint
             'server_id' => $server_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/delete', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/servers/delete', $options);
         return $this->body;
     }
 
@@ -155,13 +113,11 @@ class DataCenters extends Endpoint
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/list', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/dataCenters/list', $options);
         return $this->body;
     }
 
-    public function setDataCenterOriginPOP(int $dc_id, string $origin_pop = null): \stdClass
+    public function setDataCenterOriginPOP(int $dc_id, string $origin_pop = null): bool
     {
         $options = [
             'dc_id' => $dc_id
@@ -171,10 +127,8 @@ class DataCenters extends Endpoint
             $options['origin_pop'] = $origin_pop;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/datacenter/origin-pop/modify', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/datacenter/origin-pop/modify', $options);
+        return empty((array) $this->body);
     }
 
     public function getDataCenterRecommendedOriginPOP(int $dc_id): \stdClass
@@ -183,9 +137,7 @@ class DataCenters extends Endpoint
             'dc_id' => $dc_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/datacenter/origin-pop/recommend', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/datacenter/origin-pop/recommend', $options);
         return $this->body;
     }
 }

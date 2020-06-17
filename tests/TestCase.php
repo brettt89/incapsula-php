@@ -41,9 +41,6 @@ abstract class TestCase extends BaseTestCase
     {
         $stream = $this->getPsr7StreamForFixture($fixture);
 
-        $this->assertNotNull(json_decode($stream));
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
-
         return new Psr7\Response($statusCode, ['Content-Type' => 'application/json'], $stream);
     }
     
@@ -51,11 +48,11 @@ abstract class TestCase extends BaseTestCase
     {
         $response = $this->getPsr7JsonResponseForFixture($fixture);
 
-        $this->adapter = $this->getMockBuilder(\Incapsula\API\Adapter\Adapter::class)
+        $this->adapter = $this->getMockBuilder(\Incapsula\API\Interfaces\Adapter::class)
             ->setMethods(['request'])
             ->getMock();
         
-        $this->adapter->method('request')->willReturn($response);
+        $this->adapter->method('request')->willReturn(json_decode($response->getBody()));
 
         if ($uri !== null) {
             if ($options !== null) {

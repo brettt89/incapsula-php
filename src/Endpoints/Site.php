@@ -16,9 +16,7 @@ class Site extends Endpoint
             $options['tests'] = $tests;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/status', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/status', $options);
         return $this->body;
     }
 
@@ -28,32 +26,27 @@ class Site extends Endpoint
             'account_id' => $account_id
         ] : [];
 
-        $sites = $this->getAdapter()->request('api/prov/v1/sites/list', $options, $pagination_options);
-
-        $this->body = json_decode($sites->getBody());
+        $this->body = $this->getAdapter()->request('api/prov/v1/sites/list', $options, $pagination_options);
         return $this->body->sites;
     }
 
-    public function addSite(int $account_id, array $options): \stdClass
+    public function addSite(string $domain, array $options): \stdClass
     {
         $options = array_merge($options, [
-            'account_id' => $account_id
+            'domain' => $domain
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/add', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/add', $options);
         return $this->body;
     }
 
     public function deleteSite(int $site_id): bool
     {
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/delete', ['site_id' => $site_id]);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/delete', ['site_id' => $site_id]);
         return empty((array) $this->body);
     }
 
+    // @todo - Error from Incapsula - "Invalid configuration parameter name"
     public function setLogLevel(int $site_id, string $level): bool
     {
         $options = [
@@ -61,12 +54,11 @@ class Site extends Endpoint
             'log_level' => $level
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/setlog', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/setlog', $options);
         return ($this->body->debug_info->log_level == $level);
     }
 
+    // @todo - Error from Incapsula - "Invalid configuration parameter name"
     public function setSupportTLS(int $site_id, bool $support): \stdClass
     {
         $options = [
@@ -74,9 +66,7 @@ class Site extends Endpoint
             'support_all_tls_versions' => $support
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/tls', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/tls', $options);
         return $this->body->debug_info;
     }
 
@@ -94,24 +84,21 @@ class Site extends Endpoint
             'time_range' => $time_range
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/report', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/report', $options);
         return $this->body;
     }
 
-    public function getGeeTest(int $site_id): \stdClass
+    public function getGeeTest(int $site_id): string
     {
         $options = [
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/geetest-level', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/geetest-level', $options);
+        return $this->body->challenge_algorithm;
     }
 
+    // @todo - Error from Incapsula - "Operation not allowed"
     public function setGeeTest(int $site_id, string $algorithm): \stdClass
     {
         $options = [
@@ -119,9 +106,7 @@ class Site extends Endpoint
             'challenge_algorithm' => $algorithm
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/geetest-level/modify', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/geetest-level/modify', $options);
         return $this->body;
     }
 
@@ -130,7 +115,7 @@ class Site extends Endpoint
         string $crt_base64,
         string $key_base64 = null,
         string $passphrase = null
-    ): \stdClass {
+    ): bool {
         $options = [
             'site_id' => $site_id,
             'certificate' => $crt_base64
@@ -143,10 +128,8 @@ class Site extends Endpoint
             $options['passphrase'] = $passphrase;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/upload', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/upload', $options);
+        return empty((array) $this->body);
     }
 
     public function removeCustomCertificate(int $site_id, string $host_name): bool
@@ -156,9 +139,7 @@ class Site extends Endpoint
             'host_name' => $host_name
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/remove', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/remove', $options);
         return empty((array) $this->body);
     }
 
@@ -170,7 +151,7 @@ class Site extends Endpoint
         string $country = null,
         string $state = null,
         string $city = null
-    ): string {
+    ): \stdClass {
         $options = [
             'site_id' => $site_id
         ];
@@ -194,10 +175,8 @@ class Site extends Endpoint
             $options['city'] = $city;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/csr', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body->csr_content;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/customCertificate/csr', $options);
+        return $this->body;
     }
 
     public function setDataStorageRegion(int $site_id, string $region): bool
@@ -207,9 +186,7 @@ class Site extends Endpoint
             'data_storage_region' => $region
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/region-change', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/region-change', $options);
         return empty((array) $this->body);
     }
 
@@ -219,9 +196,7 @@ class Site extends Endpoint
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/show', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/show', $options);
         return $this->body->region;
     }
 
@@ -232,10 +207,11 @@ class Site extends Endpoint
             'override_site_regions_by_geo' => $value
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/override-by-geo', $options);
-
-        $this->body = json_decode($query->getBody());
-        return empty((array) $this->body);
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/override-by-geo', $options);
+        return (
+            isset($this->body->override_site_regions_by_geo) && 
+            $this->body->override_site_regions_by_geo == $value
+        );
     }
 
     public function isDataStorageRegionByGeoEnabled(int $account_id): bool
@@ -244,9 +220,7 @@ class Site extends Endpoint
             'account_id' => $account_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/show-override-by-geo', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/show-override-by-geo', $options);
         return $this->body->override_site_regions_by_geo;
     }
 
@@ -256,9 +230,7 @@ class Site extends Endpoint
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/caa/check-compliance', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/caa/check-compliance', $options);
         return $this->body->non_compliant_sans;
     }
 
@@ -269,9 +241,7 @@ class Site extends Endpoint
             'destination_account_id' => $account_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/moveSite', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/moveSite', $options);
         return $this->body;
     }
 
@@ -281,13 +251,11 @@ class Site extends Endpoint
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/domain/emails', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/domain/emails', $options);
         return $this->body->domain_emails;
     }
 
-    public function setConfig(int $site_id, string $param, $value): bool
+    public function setConfig(int $site_id, string $param, $value)
     {
         $options = [
             'site_id' => $site_id,
@@ -295,10 +263,8 @@ class Site extends Endpoint
             'value' => $value
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/configure', $options);
-
-        $this->body = json_decode($query->getBody());
-        return (isset($this->body->debug_info->{$param}) && $this->body->debug_info->{$param} == $value);
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/configure', $options);
+        return $this->body;
     }
 
     public function setSecurityConfig(int $site_id, string $rule_id, array $options): \stdClass
@@ -308,12 +274,11 @@ class Site extends Endpoint
             'rule_id' => $rule_id
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/configure/security', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/configure/security', $options);
         return $this->body;
     }
 
+    // @todo Error from Incapsula "Invalid input"
     public function setACLConfig(int $site_id, string $rule_id, array $options): \stdClass
     {
         $options = array_merge($options, [
@@ -321,9 +286,7 @@ class Site extends Endpoint
             'rule_id' => $rule_id
         ]);
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/configure/acl', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/configure/acl', $options);
         return $this->body;
     }
 
@@ -342,9 +305,7 @@ class Site extends Endpoint
             $options['whitelist_id'] = $whitelist_id;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/configure/whitelists', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/configure/whitelists', $options);
         return $this->body;
     }
 
@@ -354,9 +315,7 @@ class Site extends Endpoint
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/rewrite-port', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/rewrite-port', $options);
         return $this->body;
     }
 
@@ -366,7 +325,7 @@ class Site extends Endpoint
         int $port = null,
         bool $ssl_enabled = null,
         int $ssl_port = null
-    ): \stdClass {
+    ): bool {
         $options = [
             'site_id' => $site_id
         ];
@@ -384,24 +343,21 @@ class Site extends Endpoint
             $options['ssl_port'] = $ssl_port;
         }
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/rewrite-port/modify', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/rewrite-port/modify', $options);
+        return empty((array) $this->body);
     }
 
-    public function getErrorPage(int $site_id): \stdClass
+    public function getErrorPage(int $site_id): string
     {
         $options = [
             'site_id' => $site_id
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/error-page', $options);
-
-        $this->body = json_decode($query->getBody());
-        return $this->body;
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/error-page', $options);
+        return $this->body->error_page_template;
     }
 
+    // @todo Error from Incapsula "Invalid input"
     public function setErrorPage(int $site_id, string $template): \stdClass
     {
         $options = [
@@ -409,9 +365,7 @@ class Site extends Endpoint
             'error_page_template' => $template
         ];
 
-        $query = $this->getAdapter()->request('/api/prov/v1/sites/performance/error-page/modify', $options);
-
-        $this->body = json_decode($query->getBody());
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/error-page/modify', $options);
         return $this->body;
     }
 }

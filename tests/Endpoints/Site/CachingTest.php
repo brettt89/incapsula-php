@@ -49,6 +49,21 @@ class CachingTest extends \TestCase implements TestEndpoint
         $this->assertTrue($result);
     }
 
+    public function testGetXRayLink()
+    {
+        $this->setAdapter(
+            'Endpoints/Site/Performance/getXRayLink.json',
+            '/api/prov/v1/sites/xray/get-link',
+            [
+                'site_id' => 12345
+            ]
+        );
+
+        $result = $this->getEndpoint()->getXRayLink(12345);
+
+        $this->assertEquals('http://www.example.com/_Incapsula_Resource?SW_XRAY=0&ticket=hash', $result);
+    }
+
     public function testGetCacheMode()
     {
         $this->setAdapter(
@@ -137,7 +152,7 @@ class CachingTest extends \TestCase implements TestEndpoint
             '/api/prov/v1/sites/performance/stale-content',
             [
                 'site_id' => 12345,
-                'serve_stale_content' => true,
+                'serve_stale_content' => 'true',
                 'stale_content_mode' => 'ADAPTIVE',
                 'time' => 5,
                 'time_unit' => 'MINUTES'
@@ -173,7 +188,7 @@ class CachingTest extends \TestCase implements TestEndpoint
             '/api/prov/v1/sites/performance/cache404/modify',
             [
                 'site_id' => 12345,
-                'enabled' => true,
+                'enable' => 'true',
                 'time' => 10,
                 'time_unit' => 'HOURS'
             ]
@@ -181,7 +196,7 @@ class CachingTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->setCache404Settings(12345, true, 10, 'HOURS');
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testPurgeResources()
@@ -193,7 +208,7 @@ class CachingTest extends \TestCase implements TestEndpoint
                 'site_id' => 12345,
                 'resource_url' => '/test/url/page.css',
                 'resource_pattern' => 'equals',
-                'should_purge_all_site_resources' => true
+                'should_purge_all_site_resources' => 'true'
             ]
         );
 
@@ -215,7 +230,6 @@ class CachingTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->getAdvancedCacheSettings(12345, 'send_age_header');
 
-        $this->assertIsString($result);
         $this->assertEquals(true, $result);
     }
 
@@ -227,7 +241,7 @@ class CachingTest extends \TestCase implements TestEndpoint
             [
                 'site_id' => 12345,
                 'param' => 'send_age_header',
-                'value' => false
+                'value' => 'false'
             ]
         );
 
@@ -266,7 +280,7 @@ class CachingTest extends \TestCase implements TestEndpoint
                     $this->equalTo('/api/prov/v1/sites/performance/response-headers'),
                     $this->equalTo([
                         'site_id' => 12345,
-                        'cache_all_headers' => true
+                        'cache_all_headers' => 'true'
                     ])
                 ],
                 [
@@ -326,19 +340,19 @@ class CachingTest extends \TestCase implements TestEndpoint
             '/api/prov/v1/sites/performance/cache-shield/enable',
             [
                 'site_id' => 12345,
-                'enabled' => false
+                'enable' => false
             ]
         );
 
         $result = $this->getEndpoint()->enableCacheShield(12345, false);
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testIsCacheShieldEnabled()
     {
         $this->setAdapter(
-            'Endpoints/success.json',
+            'Endpoints/Site/Performance/isCacheShieldEnabled.json',
             '/api/prov/v1/sites/performance/cache-shield',
             [
                 'site_id' => 12345
@@ -347,21 +361,6 @@ class CachingTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->isCacheShieldEnabled(12345);
 
-        $this->assertIsObject($result);
-    }
-
-    public function testGetXRayLink()
-    {
-        $this->setAdapter(
-            'Endpoints/success.json',
-            '/api/prov/v1/sites/xray/get-link',
-            [
-                'site_id' => 12345
-            ]
-        );
-
-        $result = $this->getEndpoint()->getXRayLink(12345);
-
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 }

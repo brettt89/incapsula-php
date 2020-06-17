@@ -19,7 +19,7 @@ class CacheRulesTest extends \TestCase implements TestEndpoint
     public function testAddCacheRule()
     {
         $this->setAdapter(
-            'Endpoints/success.json',
+            'Endpoints/Site/Performance/addCacheRule.json',
             '/api/prov/v1/sites/performance/caching-rules/add',
             [
                 'site_id' => 12345,
@@ -36,7 +36,8 @@ class CacheRulesTest extends \TestCase implements TestEndpoint
             'ttl_unit' => 'MINUTES'
         ]);
 
-        $this->assertIsObject($result);
+        $this->assertIsInt($result);
+        $this->assertEquals(12345, $result);
     }
 
     public function testDeleteCacheRule()
@@ -73,7 +74,7 @@ class CacheRulesTest extends \TestCase implements TestEndpoint
             'ttl_unit' => 'MINUTES'
         ]);
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testEnableCacheRule()
@@ -84,13 +85,13 @@ class CacheRulesTest extends \TestCase implements TestEndpoint
             [
                 'site_id' => 12345,
                 'rule_id' => 98765,
-                'enable' => false
+                'enable' => 'false'
             ]
         );
 
         $result = $this->getEndpoint()->enableCacheRule(12345, 98765, false);
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testListCacheRules()
