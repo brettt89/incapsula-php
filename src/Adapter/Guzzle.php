@@ -11,21 +11,25 @@ class Guzzle implements Adapter
 {
     private $client;
     private $body;
+    private $debug=false;
+    private $debugInfo;
 
     /**
      * @inheritDoc
      */
-    public function __construct(Auth $auth, string $baseURI = null)
+    public function __construct(Auth $auth, string $baseURI = null, bool $debug = false)
     {
         if ($baseURI === null) {
             $baseURI = 'https://my.incapsula.com/';
         }
 
+        $this->debug = $debug;
+
         $this->body = $auth->getRequestParameters();
         $this->client = new Client([
             'base_uri' => $baseURI,
             'Accept' => 'application/json',
-            'timeout'  => 30.0
+            'timeout'  => 60.0
         ]);
     }
 
@@ -56,8 +60,9 @@ class Guzzle implements Adapter
         $object = json_decode($response->getBody());
 
         // Cleanup
+        if ($this->debug) $this->debugInfo = $object->debug_info;
         unset($object->res, $object->res_message);
-        if empty($object->debug_info) unset($object->debug_info);
+        unset($object->debug_info);
         
         return $object;
     }
@@ -88,5 +93,10 @@ class Guzzle implements Adapter
 
             throw new IncapsulaException($message, $json->res);
         }
+    }
+
+    public function getDebugInfo()
+    {
+        return $this->debugInfo;
     }
 }

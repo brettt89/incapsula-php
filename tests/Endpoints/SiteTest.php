@@ -93,11 +93,15 @@ class SiteTest extends \TestCase implements TestEndpoint
             '/api/prov/v1/sites/add',
             [
                 'account_id' => 12345,
-                'domain' => 'www.example.com'
+                'domain' => 'www.example.com',
+                'site_ip' => '1.2.3.4'
             ]
         );
 
-        $site = $this->getEndpoint()->addSite(12345, ['domain' => 'www.example.com']);
+        $site = $this->getEndpoint()->addSite('www.example.com', [
+            'account_id' => 12345,
+            'site_ip' => '1.2.3.4'
+            ]);
 
         $this->assertIsObject($site);
 
@@ -141,7 +145,7 @@ class SiteTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->setConfig(12345, 'domain_email', 'admin@example.com');
 
-        $this->assertTrue($result);
+        $this->assertIsObject($result);
     }
 
     public function testSetSecurityConfig()
@@ -298,7 +302,7 @@ class SiteTest extends \TestCase implements TestEndpoint
     public function testGetGeeTest()
     {
         $this->setAdapter(
-            'Endpoints/success.json',
+            'Endpoints/Site/getGeeTest.json',
             '/api/prov/v1/sites/geetest-level',
             [
                 'site_id' => 12345
@@ -307,7 +311,8 @@ class SiteTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->getGeeTest(12345);
 
-        $this->assertIsObject($result);
+        $this->assertIsString($result);
+        $this->assertEquals('reCAPTCHA 2.0', $result);
     }
 
     public function testSetGeeTest()
@@ -346,7 +351,7 @@ class SiteTest extends \TestCase implements TestEndpoint
             'testPassphrase'
         );
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testRemoveCustomCertificate()
@@ -391,10 +396,11 @@ class SiteTest extends \TestCase implements TestEndpoint
             'New York City'
         );
 
-        $this->assertIsString($result);
+        $this->assertIsObject($result);
+        $this->assertObjectHasAttribute('csr_content', $result);
         $this->assertEquals(
             "-----BEGIN CERTIFICATE REQUEST-----\nMIICyTCCAbECAQAwgYMxCzAJBgNVBAYTAlVTMREwDwYDVQQIEwhEZWxhd2FyZTEO...",
-            $result
+            $result->csr_content
         );
     }
 
@@ -405,11 +411,11 @@ class SiteTest extends \TestCase implements TestEndpoint
             '/api/prov/v1/sites/data-privacy/region-change',
             [
                 'site_id' => 12345,
-                'data_storage_region' => 'AP'
+                'data_storage_region' => 'APAC'
             ]
         );
 
-        $result = $this->getEndpoint()->setDataStorageRegion(12345, 'AP');
+        $result = $this->getEndpoint()->setDataStorageRegion(12345, 'APAC');
 
         $this->assertTrue($result);
     }
@@ -433,7 +439,7 @@ class SiteTest extends \TestCase implements TestEndpoint
     public function testSetDataStorageRegionByGeo()
     {
         $this->setAdapter(
-            'Endpoints/success.json',
+            'Endpoints/Site/setDataStorageRegionByGeo.json',
             '/api/prov/v1/sites/data-privacy/override-by-geo',
             [
                 'account_id' => 12345,
@@ -531,13 +537,13 @@ class SiteTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->setRewritePort(12345, true, 8080, true, 444);
 
-        $this->assertIsObject($result);
+        $this->assertTrue($result);
     }
 
     public function testGetErrorPage()
     {
         $this->setAdapter(
-            'Endpoints/success.json',
+            'Endpoints/Site/getErrorPage.json',
             '/api/prov/v1/sites/performance/error-page',
             [
                 'site_id' => 12345
@@ -546,7 +552,8 @@ class SiteTest extends \TestCase implements TestEndpoint
 
         $result = $this->getEndpoint()->getErrorPage(12345);
 
-        $this->assertIsObject($result);
+        $this->assertIsString($result);
+        $this->assertEquals('Test Page', $result);
     }
 
     public function testSetErrorPage()
