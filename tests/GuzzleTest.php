@@ -46,11 +46,19 @@ class GuzzleTest extends \TestCase
         $property_res->setAccessible(true);
         $property_res->setValue($this->adapter, 1);
 
+        $property_res_message = $class->getProperty('res_message');
+        $property_res_message->setAccessible(true);
+        $property_res_message->setValue($this->adapter, 'Test Message');
+
+        $property_debug_info = $class->getProperty('debug_info');
+        $property_debug_info->setAccessible(true);
+        $property_debug_info->setValue($this->adapter, ['problem' => 'Test Problem']);
+
         $this->expectException(\Incapsula\API\IncapsulaException::class);
         $method->invoke($this->adapter);
     }
 
-    public function testParseResponse()
+    public function testParseResponseJSONException()
     {
         $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
         $method = $class->getMethod('parseResponse');
@@ -60,6 +68,20 @@ class GuzzleTest extends \TestCase
 
         $this->expectException(\Incapsula\API\JSONException::class);
         $method->invokeArgs($this->adapter, [$response]);
+    }
+
+    public function testParseResponse()
+    {
+        $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
+        $method = $class->getMethod('parseResponse');
+        $method->setAccessible(true);
+
+        $response = $this->getPsr7JsonResponseForFixture('Site/listSites.json');
+        $result = $method->invokeArgs($this->adapter, [$response]);
+
+        $this->assertIsObject($result);
+        $this->assertObjectHasAttribute('sites', $result);
+        $this->assertIsArray($result->sites);
     }
 
     public function testGetDebugInfo()
