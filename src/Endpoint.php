@@ -2,15 +2,13 @@
 
 namespace Incapsula\API;
 
-use Incapsula\API\Interfaces\Endpoint as EndpointInterface;
-use Incapsula\API\Interfaces\Adapter;
-use Incapsula\API\Traits\APITrait;
+use Incapsula\API\API;
+use Incapsula\API\Adapter;
 
-abstract class Endpoint implements EndpointInterface
+abstract class Endpoint implements API
 {
-    use APITrait;
-
     private $adapter;
+    private $body;
 
     public function __construct(Adapter $adapter)
     {
