@@ -38,5 +38,5 @@ $account    = new Incapsula\API\Account($adapter);
 
 $account_id = 123456;
     
-print_r($account->listSites($account_id));
+print_r($account->getSites($account_id));
 ```
