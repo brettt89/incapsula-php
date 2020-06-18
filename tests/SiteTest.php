@@ -58,7 +58,7 @@ class SiteTest extends \TestCase implements TestAPI
     // Managed Sites
     //
 
-    public function testListSites()
+    public function testGetSites()
     {
         $this->setAdapter(
             'Site/getSites.json',
@@ -67,7 +67,7 @@ class SiteTest extends \TestCase implements TestAPI
                 'account_id' => 12345
             ]
         );
-        $sites = $this->getEndpoint()->listSites(12345);
+        $sites = $this->getEndpoint()->getSites(12345);
 
         $this->assertIsArray($sites);
         $this->assertCount(2, $sites);
@@ -86,7 +86,7 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertEquals('11.22.33.44', $sites[1]->ips[0]);
     }
 
-    public function testAddSite()
+    public function testCreateSite()
     {
         $this->setAdapter(
             'Site/getStatus.json',
@@ -98,7 +98,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $site = $this->getEndpoint()->addSite('www.example.com', [
+        $site = $this->getEndpoint()->createSite('www.example.com', [
             'account_id' => 12345,
             'site_ip' => '1.2.3.4'
             ]);
@@ -131,7 +131,7 @@ class SiteTest extends \TestCase implements TestAPI
     // Site Configuration
     //
 
-    public function testSetConfig()
+    public function testModifyConfig()
     {
         $this->setAdapter(
             'Site/setConfig.json',
@@ -143,12 +143,12 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setConfig(12345, 'domain_email', 'admin@example.com');
+        $result = $this->getEndpoint()->modifyConfig(12345, 'domain_email', 'admin@example.com');
 
         $this->assertIsObject($result);
     }
 
-    public function testSetSecurityConfig()
+    public function testModifySecurityConfig()
     {
         $this->setAdapter(
             'Site/getStatus.json',
@@ -161,7 +161,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setSecurityConfig(
+        $result = $this->getEndpoint()->modifySecurityConfig(
             12345,
             'api.threats.bot_access_control',
             [
@@ -173,7 +173,7 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testSetACLConfig()
+    public function testModifyACLConfig()
     {
         $this->setAdapter(
             'Site/getStatus.json',
@@ -186,7 +186,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setACLConfig(
+        $result = $this->getEndpoint()->modifyACLConfig(
             12345,
             'api.acl.blacklisted_urls',
             [
@@ -198,7 +198,32 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testSetWhitelistConfig()
+    public function testCreateWhitelistConfig()
+    {
+        $this->setAdapter(
+            'Site/getStatus.json',
+            '/api/prov/v1/sites/configure/whitelists',
+            [
+                'site_id' => 12345,
+                'rule_id' => 'api.threats.sql_injection',
+                'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
+                'ips' => '1.2.3.4,192.168.1.1-192.168.1.100,192.168.1.1/24',
+                'countries' => 'GT,VN'
+            ]
+        );
+
+        $result = $this->getEndpoint()->createWhitelistConfig(
+            12345,
+            'api.threats.sql_injection',
+            [
+                'urls' => '%2Fadmin%2Fdashboard%2Fstats%3Fx%3D1%26y%3D2%23z%3D3,%2Fadmin',
+                'ips' => '1.2.3.4,192.168.1.1-192.168.1.100,192.168.1.1/24',
+                'countries' => 'GT,VN'
+            ]
+        );
+    }
+
+    public function testModifyWhitelistConfig()
     {
         $this->setAdapter(
             'Site/getStatus.json',
@@ -213,7 +238,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setWhitelistConfig(
+        $result = $this->getEndpoint()->modifyWhitelistConfig(
             12345,
             'api.threats.sql_injection',
             12345,
@@ -227,7 +252,27 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testSetLogLevel()
+    public function testDeleteWhitelistConfig()
+    {
+        $this->setAdapter(
+            'Site/getStatus.json',
+            '/api/prov/v1/sites/configure/whitelists',
+            [
+                'site_id' => 12345,
+                'rule_id' => 'api.threats.sql_injection',
+                'whitelist_id' => 54321,
+                'delete_whitelist' => true
+            ]
+        );
+
+        $result = $this->getEndpoint()->deleteWhitelistConfig(
+            12345,
+            'api.threats.sql_injection',
+            54321
+        );
+    }
+
+    public function testModifyLogLevel()
     {
         $this->setAdapter(
             'Site/setLogLevel.json',
@@ -238,15 +283,15 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setLogLevel(12345, 'full');
+        $result = $this->getEndpoint()->modifyLogLevel(12345, 'full');
 
         $this->assertTrue($result);
     }
 
-    public function testSetSupportTLS()
+    public function testEnableSupportTLS()
     {
         $this->setAdapter(
-            'Site/setSupportTLS.json',
+            'success.json',
             '/api/prov/v1/sites/tls',
             [
                 'site_id' => 12345,
@@ -254,14 +299,23 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setSupportTLS(12345, true);
+        $result = $this->getEndpoint()->enableSupportTLS(12345);
+        $this->assertTrue($result);
+    }
 
-        $this->assertIsObject($result);
+    public function testDisableSupportTLS()
+    {
+        $this->setAdapter(
+            'success.json',
+            '/api/prov/v1/sites/tls',
+            [
+                'site_id' => 12345,
+                'support_all_tls_versions' => false
+            ]
+        );
 
-        $this->assertObjectHasAttribute('support_all_tls_versions', $result);
-        $this->assertEquals('true', $result->support_all_tls_versions);
-        $this->assertObjectHasAttribute('new_A_record', $result);
-        $this->assertEquals('1.2.3.4', $result->new_A_record);
+        $result = $this->getEndpoint()->disableSupportTLS(12345);
+        $this->assertTrue($result);
     }
 
     public function testGetReport()
@@ -315,7 +369,7 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertEquals('reCAPTCHA 2.0', $result);
     }
 
-    public function testSetGeeTest()
+    public function testModifyGeeTest()
     {
         $this->setAdapter(
             'success.json',
@@ -326,7 +380,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setGeeTest(12345, 'test algorithm');
+        $result = $this->getEndpoint()->modifyGeeTest(12345, 'test algorithm');
 
         $this->assertIsObject($result);
     }
@@ -354,7 +408,7 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertTrue($result);
     }
 
-    public function testRemoveCustomCertificate()
+    public function testDeleteCustomCertificate()
     {
         $this->setAdapter(
             'success.json',
@@ -365,7 +419,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->removeCustomCertificate(12345, 'www.example.com');
+        $result = $this->getEndpoint()->deleteCustomCertificate(12345, 'www.example.com');
 
         $this->assertTrue($result);
     }
@@ -404,7 +458,7 @@ class SiteTest extends \TestCase implements TestAPI
         );
     }
 
-    public function testSetDataStorageRegion()
+    public function testModifyDataStorageRegion()
     {
         $this->setAdapter(
             'success.json',
@@ -415,7 +469,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setDataStorageRegion(12345, 'APAC');
+        $result = $this->getEndpoint()->modifyDataStorageRegion(12345, 'APAC');
 
         $this->assertTrue($result);
     }
@@ -436,10 +490,10 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertEquals('EU', $result);
     }
 
-    public function testSetDataStorageRegionByGeo()
+    public function testEnableDataStorageRegionByGeo()
     {
         $this->setAdapter(
-            'Site/setDataStorageRegionByGeo.json',
+            'Site/enableDataStorageRegionByGeo.json',
             '/api/prov/v1/sites/data-privacy/override-by-geo',
             [
                 'account_id' => 12345,
@@ -447,8 +501,22 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setDataStorageRegionByGeo(12345, true);
+        $result = $this->getEndpoint()->enableDataStorageRegionByGeo(12345);
+        $this->assertTrue($result);
+    }
 
+    public function testDisableDataStorageRegionByGeo()
+    {
+        $this->setAdapter(
+            'Site/disableDataStorageRegionByGeo.json',
+            '/api/prov/v1/sites/data-privacy/override-by-geo',
+            [
+                'account_id' => 12345,
+                'override_site_regions_by_geo' => false
+            ]
+        );
+
+        $result = $this->getEndpoint()->disableDataStorageRegionByGeo(12345);
         $this->assertTrue($result);
     }
 
@@ -502,7 +570,7 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertEquals('', $result->status);
     }
 
-    public function testGetRewritePort()
+    public function testGetRewritePorts()
     {
         $this->setAdapter(
             'Site/Performance/getRewritePort.json',
@@ -512,7 +580,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->getRewritePort(12345);
+        $result = $this->getEndpoint()->getRewritePorts(12345);
 
         $this->assertIsObject($result);
         $this->assertObjectHasAttribute('port', $result);
@@ -521,7 +589,7 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertEquals('8080', $result->port->to);
     }
 
-    public function testSetRewritePort()
+    public function testModifyRewritePorts()
     {
         $this->setAdapter(
             'success.json',
@@ -535,7 +603,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setRewritePort(12345, true, 8080, true, 444);
+        $result = $this->getEndpoint()->modifyRewritePorts(12345, true, 8080, true, 444);
 
         $this->assertTrue($result);
     }
@@ -556,7 +624,7 @@ class SiteTest extends \TestCase implements TestAPI
         $this->assertEquals('Test Page', $result);
     }
 
-    public function testSetErrorPage()
+    public function testModifyErrorPage()
     {
         $this->setAdapter(
             'success.json',
@@ -567,7 +635,7 @@ class SiteTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setErrorPage(12345, '<html><body></body></html>');
+        $result = $this->getEndpoint()->modifyErrorPage(12345, '<html><body></body></html>');
 
         $this->assertIsObject($result);
     }

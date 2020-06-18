@@ -20,7 +20,7 @@ class Site extends Endpoint
         return $this->body;
     }
 
-    public function listSites(int $account_id = null, array $pagination_options = []): array
+    public function getSites(int $account_id = null, array $pagination_options = []): array
     {
         $options = $account_id !== null ? [
             'account_id' => $account_id
@@ -30,7 +30,7 @@ class Site extends Endpoint
         return $this->body->sites;
     }
 
-    public function addSite(string $domain, array $options): \stdClass
+    public function createSite(string $domain, array $options): \stdClass
     {
         $options = array_merge($options, [
             'domain' => $domain
@@ -47,7 +47,7 @@ class Site extends Endpoint
     }
 
     // @todo - Error from Incapsula - "Invalid configuration parameter name"
-    public function setLogLevel(int $site_id, string $level): bool
+    public function modifyLogLevel(int $site_id, string $level): bool
     {
         $options = [
             'site_id' => $site_id,
@@ -59,15 +59,27 @@ class Site extends Endpoint
     }
 
     // @todo - Error from Incapsula - "Invalid configuration parameter name"
-    public function setSupportTLS(int $site_id, bool $support): \stdClass
+    public function enableSupportTLS(int $site_id): bool
     {
         $options = [
             'site_id' => $site_id,
-            'support_all_tls_versions' => $support
+            'support_all_tls_versions' => true
         ];
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/tls', $options);
-        return $this->body->debug_info;
+        return empty((array) $this->body);
+    }
+
+    // @todo - Error from Incapsula - "Invalid configuration parameter name"
+    public function disableSupportTLS(int $site_id): bool
+    {
+        $options = [
+            'site_id' => $site_id,
+            'support_all_tls_versions' => false
+        ];
+
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/tls', $options);
+        return empty((array) $this->body);
     }
 
     public function getReport(
@@ -99,7 +111,7 @@ class Site extends Endpoint
     }
 
     // @todo - Error from Incapsula - "Operation not allowed"
-    public function setGeeTest(int $site_id, string $algorithm): \stdClass
+    public function modifyGeeTest(int $site_id, string $algorithm): \stdClass
     {
         $options = [
             'site_id' => $site_id,
@@ -132,7 +144,7 @@ class Site extends Endpoint
         return empty((array) $this->body);
     }
 
-    public function removeCustomCertificate(int $site_id, string $host_name): bool
+    public function deleteCustomCertificate(int $site_id, string $host_name): bool
     {
         $options = [
             'site_id' => $site_id,
@@ -179,7 +191,7 @@ class Site extends Endpoint
         return $this->body;
     }
 
-    public function setDataStorageRegion(int $site_id, string $region): bool
+    public function modifyDataStorageRegion(int $site_id, string $region): bool
     {
         $options = [
             'site_id' => $site_id,
@@ -200,17 +212,31 @@ class Site extends Endpoint
         return $this->body->region;
     }
 
-    public function setDataStorageRegionByGeo(int $account_id, bool $value): bool
+    public function enableDataStorageRegionByGeo(int $account_id): bool
     {
         $options = [
             'account_id' => $account_id,
-            'override_site_regions_by_geo' => $value
+            'override_site_regions_by_geo' => true
         ];
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/override-by-geo', $options);
         return (
             isset($this->body->override_site_regions_by_geo) && 
-            $this->body->override_site_regions_by_geo == $value
+            $this->body->override_site_regions_by_geo == true
+        );
+    }
+
+    public function disableDataStorageRegionByGeo(int $account_id): bool
+    {
+        $options = [
+            'account_id' => $account_id,
+            'override_site_regions_by_geo' => false
+        ];
+
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/override-by-geo', $options);
+        return (
+            isset($this->body->override_site_regions_by_geo) && 
+            $this->body->override_site_regions_by_geo == false
         );
     }
 
@@ -255,7 +281,7 @@ class Site extends Endpoint
         return $this->body->domain_emails;
     }
 
-    public function setConfig(int $site_id, string $param, $value)
+    public function modifyConfig(int $site_id, string $param, $value)
     {
         $options = [
             'site_id' => $site_id,
@@ -267,7 +293,7 @@ class Site extends Endpoint
         return $this->body;
     }
 
-    public function setSecurityConfig(int $site_id, string $rule_id, array $options): \stdClass
+    public function modifySecurityConfig(int $site_id, string $rule_id, array $options): \stdClass
     {
         $options = array_merge($options, [
             'site_id' => $site_id,
@@ -279,7 +305,7 @@ class Site extends Endpoint
     }
 
     // @todo Error from Incapsula "Invalid input"
-    public function setACLConfig(int $site_id, string $rule_id, array $options): \stdClass
+    public function modifyACLConfig(int $site_id, string $rule_id, array $options): \stdClass
     {
         $options = array_merge($options, [
             'site_id' => $site_id,
@@ -290,7 +316,7 @@ class Site extends Endpoint
         return $this->body;
     }
 
-    public function setWhitelistConfig(
+    public function modifyWhitelistConfig(
         int $site_id,
         string $rule_id,
         int $whitelist_id = null,
@@ -309,7 +335,24 @@ class Site extends Endpoint
         return $this->body;
     }
 
-    public function getRewritePort(int $site_id): \stdClass
+    public function createWhitelistConfig(
+        int $site_id,
+        string $rule_id,
+        array $options = []
+    )
+    {
+        $this->modifyWhitelistConfig($site_id, $rule_id, null, $options);
+    }
+
+    public function deleteWhitelistConfig(int $site_id, string $rule_id, int $whitelist_id)
+    {
+        $this->modifyWhitelistConfig($site_id, $rule_id, null, [
+            'whitelist_id' => $whitelist_id,
+            'delete_whitelist' => true
+        ]);
+    }
+
+    public function getRewritePorts(int $site_id): \stdClass
     {
         $options = [
             'site_id' => $site_id
@@ -319,7 +362,7 @@ class Site extends Endpoint
         return $this->body;
     }
 
-    public function setRewritePort(
+    public function modifyRewritePorts(
         int $site_id,
         bool $enabled = null,
         int $port = null,
@@ -358,7 +401,7 @@ class Site extends Endpoint
     }
 
     // @todo Error from Incapsula "Invalid input"
-    public function setErrorPage(int $site_id, string $template): \stdClass
+    public function modifyErrorPage(int $site_id, string $template): \stdClass
     {
         $options = [
             'site_id' => $site_id,

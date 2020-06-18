@@ -80,7 +80,7 @@ class CachingTest extends \TestCase implements TestAPI
         $this->assertEquals('dynamic_and_aggressive', $mode);
     }
 
-    public function testSetCacheMode()
+    public function testModifyCacheMode()
     {
         $this->setAdapter(
             'success.json',
@@ -93,7 +93,7 @@ class CachingTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setCacheMode(12345, 'static_and_aggressive', '5_min', '1_hr');
+        $result = $this->getEndpoint()->modifyCacheMode(12345, 'static_and_aggressive', '5_min', '1_hr');
 
         $this->assertTrue($result);
     }
@@ -114,7 +114,7 @@ class CachingTest extends \TestCase implements TestAPI
         $this->assertEquals('do_not_cache', $mode);
     }
 
-    public function testSetSecureResourceMode()
+    public function testModifySecureResourceMode()
     {
         $this->setAdapter(
             'success.json',
@@ -125,7 +125,7 @@ class CachingTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setSecureResourceMode(12345, 'do_not_cache');
+        $result = $this->getEndpoint()->modifySecureResourceMode(12345, 'do_not_cache');
 
         $this->assertTrue($result);
     }
@@ -145,7 +145,7 @@ class CachingTest extends \TestCase implements TestAPI
         $this->assertIsObject($mode);
     }
 
-    public function testSetStaleContentSettings()
+    public function testModifyStaleContentSettings()
     {
         $this->setAdapter(
             'success.json',
@@ -159,7 +159,7 @@ class CachingTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setStaleContentSettings(12345, true, 'ADAPTIVE', 5, 'MINUTES');
+        $result = $this->getEndpoint()->modifyStaleContentSettings(12345, true, 'ADAPTIVE', 5, 'MINUTES');
 
         $this->assertTrue($result);
     }
@@ -181,7 +181,7 @@ class CachingTest extends \TestCase implements TestAPI
         $this->assertEquals(10, $cache404->time);
     }
 
-    public function testSetCache404Settings()
+    public function testModifyCache404Settings()
     {
         $this->setAdapter(
             'success.json',
@@ -194,7 +194,7 @@ class CachingTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setCache404Settings(12345, true, 10, 'HOURS');
+        $result = $this->getEndpoint()->modifyCache404Settings(12345, true, 10, 'HOURS');
 
         $this->assertTrue($result);
     }
@@ -233,7 +233,7 @@ class CachingTest extends \TestCase implements TestAPI
         $this->assertEquals(true, $result);
     }
 
-    public function testSetAdvancedCacheSettings()
+    public function testModifyAdvancedCacheSettings()
     {
         $this->setAdapter(
             'success.json',
@@ -245,7 +245,7 @@ class CachingTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setAdvancedCacheSettings(12345, 'send_age_header', false);
+        $result = $this->getEndpoint()->modifyAdvancedCacheSettings(12345, 'send_age_header', false);
 
         $this->assertTrue($result);
     }
@@ -270,7 +270,7 @@ class CachingTest extends \TestCase implements TestAPI
         $this->assertEquals('header3', $result->custom_headers[2]);
     }
 
-    public function testSetCachedResponseHeaders()
+    public function testModifyCachedResponseHeaders()
     {
         $this->setAdapter('success.json');
         $this->getAdapter()->expects($this->exactly(2))
@@ -292,11 +292,11 @@ class CachingTest extends \TestCase implements TestAPI
                 ]
             );
 
-        $result = $this->getEndpoint()->setCachedResponseHeaders(12345, 'test-cache-all', true);
+        $result = $this->getEndpoint()->modifyCachedResponseHeaders(12345, 'test-cache-all', true);
 
         $this->assertTrue($result);
 
-        $result = $this->getEndpoint()->setCachedResponseHeaders(12345, 'test-cache-all');
+        $result = $this->getEndpoint()->modifyCachedResponseHeaders(12345, 'test-cache-all');
 
         $this->assertTrue($result);
     }
@@ -317,7 +317,7 @@ class CachingTest extends \TestCase implements TestAPI
         $this->assertEquals('some_header', $result);
     }
 
-    public function testSetTagResponseHeader()
+    public function testModifyTagResponseHeader()
     {
         $this->setAdapter(
             'success.json',
@@ -328,7 +328,7 @@ class CachingTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setTagResponseHeader(12345, 'some_header');
+        $result = $this->getEndpoint()->modifyTagResponseHeader(12345, 'some_header');
 
         $this->assertTrue($result);
     }
@@ -340,11 +340,27 @@ class CachingTest extends \TestCase implements TestAPI
             '/api/prov/v1/sites/performance/cache-shield/enable',
             [
                 'site_id' => 12345,
+                'enable' => true
+            ]
+        );
+
+        $result = $this->getEndpoint()->enableCacheShield(12345);
+
+        $this->assertTrue($result);
+    }
+
+    public function testDisableCacheShield()
+    {
+        $this->setAdapter(
+            'success.json',
+            '/api/prov/v1/sites/performance/cache-shield/enable',
+            [
+                'site_id' => 12345,
                 'enable' => false
             ]
         );
 
-        $result = $this->getEndpoint()->enableCacheShield(12345, false);
+        $result = $this->getEndpoint()->disableCacheShield(12345);
 
         $this->assertTrue($result);
     }

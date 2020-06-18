@@ -7,7 +7,7 @@ class ApiKeyTest extends \TestCase
     public function testGetRequestParameters()
     {
         $auth    = new \Incapsula\API\ApiKey('123456789', 'abcdefghijklymnop-123456789');
-        $parameters = $auth->getRequestParameters();
+        $parameters = $auth->toArray();
 
         $this->assertArrayHasKey('api_id', $parameters);
         $this->assertArrayHasKey('api_key', $parameters);

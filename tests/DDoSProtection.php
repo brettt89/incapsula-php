@@ -136,7 +136,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
         $this->assertEquals('imperva.test.com', $result->resolved_cnames[0]);
     }
 
-    public function testSetOriginIP()
+    public function testModifyOriginIP()
     {
         $this->setAdapter(
             'DDoSProtection/addOriginIP.json',
@@ -147,7 +147,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setOriginIP(
+        $result = $this->getEndpoint()->modifyOriginIP(
             '1.2.3.4',
             '172.17.14.1'
         );
@@ -160,7 +160,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
         $this->assertEquals('172.17.14.1', $result->edge_ip);
     }
 
-    public function testSetOriginCNAME()
+    public function testModifyOriginCNAME()
     {
         $this->setAdapter(
             'DDoSProtection/addOriginCNAME.json',
@@ -171,7 +171,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setOriginCNAME(
+        $result = $this->getEndpoint()->modifyOriginCNAME(
             '1.2.3.4',
             'imperva.test.com'
         );
@@ -184,7 +184,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
         $this->assertEquals('172.17.14.1', $result->edge_ip);
     }
 
-    public function testSetOriginDNSIP()
+    public function testModifyOriginDNSIP()
     {
         $this->setAdapter(
             'DDoSProtection/addOriginDNSIP.json',
@@ -197,7 +197,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setOriginDNSIP(
+        $result = $this->getEndpoint()->modifyOriginDNSIP(
             '1.2.3.4',
             'www.example.com',
             '172.17.14.1',
@@ -216,7 +216,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
         $this->assertEquals('157.166.226.25', $result->resolved_ips[0]);
     }
 
-    public function testSetOriginDNSCNAME()
+    public function testModifyOriginDNSCNAME()
     {
         $this->setAdapter(
             'DDoSProtection/addOriginDNSCNAME.json',
@@ -229,7 +229,7 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setOriginDNSCNAME(
+        $result = $this->getEndpoint()->modifyOriginDNSCNAME(
             'imperva.test.com',
             'www.example.com',
             '172.17.14.1',
@@ -255,11 +255,27 @@ class DDoSProtectionTest extends \TestCase implements TestAPI
             '/api/prov/v1/ddos-protection/edge-ip/edit/ha-protocol',
             [
                 'edge_ip' => '1.2.3.4',
+                'enable_ha_protocol' => true
+            ]
+        );
+
+        $result = $this->getEndpoint()->enableHAProtocol('1.2.3.4');
+
+        $this->assertTrue($result);
+    }
+
+    public function testDisableHAProtocol()
+    {
+        $this->setAdapter(
+            'success.json',
+            '/api/prov/v1/ddos-protection/edge-ip/edit/ha-protocol',
+            [
+                'edge_ip' => '1.2.3.4',
                 'enable_ha_protocol' => false
             ]
         );
 
-        $result = $this->getEndpoint()->enableHAProtocol('1.2.3.4', false);
+        $result = $this->getEndpoint()->disableHAProtocol('1.2.3.4');
 
         $this->assertTrue($result);
     }

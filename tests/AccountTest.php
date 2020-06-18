@@ -61,7 +61,7 @@ class AccountTest extends \TestCase implements TestAPI
         $this->assertIsArray($subscription->bandwidthHistory);
     }
 
-    public function testSetConfig()
+    public function testModifyConfig()
     {
         $this->setAdapter(
             'success.json',
@@ -73,7 +73,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setConfig(12345, 'email', 'admin@example.com');
+        $result = $this->getEndpoint()->modifyConfig(12345, 'email', 'admin@example.com');
 
         $this->assertTrue($result);
     }
@@ -82,10 +82,10 @@ class AccountTest extends \TestCase implements TestAPI
     // Managed Accounts
     //
 
-    public function testListManagedAccounts()
+    public function testGetManagedAccounts()
     {
         $this->setAdapter('Account/getAccounts.json', '/api/prov/v1/accounts/list');
-        $accounts = $this->getEndpoint()->listManagedAccounts();
+        $accounts = $this->getEndpoint()->getManagedAccounts();
 
         $this->assertIsArray($accounts);
         $this->assertCount(2, $accounts);
@@ -102,7 +102,7 @@ class AccountTest extends \TestCase implements TestAPI
         $this->assertEquals(1243, $accounts[0]->logins->login_id);
     }
 
-    public function testAddManagedAccount()
+    public function testCreateManagedAccount()
     {
         $this->setAdapter(
             'Account/addAccount.json',
@@ -113,7 +113,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
 
-        $account = $this->getEndpoint()->addManagedAccount('demo_account@imperva.com', [
+        $account = $this->getEndpoint()->createManagedAccount('demo_account@imperva.com', [
             'user_name' => 'John Doe'
         ]);
 
@@ -142,7 +142,7 @@ class AccountTest extends \TestCase implements TestAPI
     // Sub Accounts
     //
 
-    public function testListSubAccounts()
+    public function testGetSubAccounts()
     {
         $this->setAdapter(
             'Account/getSubAccounts.json',
@@ -153,7 +153,7 @@ class AccountTest extends \TestCase implements TestAPI
                 'page_num' => 2
             ]
         );
-        $subAccounts = $this->getEndpoint()->listSubAccounts(12345, [
+        $subAccounts = $this->getEndpoint()->getSubAccounts(12345, [
             'page_size' => 100,
             'page_num' => 2
         ]);
@@ -167,7 +167,7 @@ class AccountTest extends \TestCase implements TestAPI
         $this->assertEquals('My super lovely sub account', $subAccounts[1]->sub_account_name);
     }
 
-    public function testAddSubAccount()
+    public function testCreateSubAccount()
     {
         $this->setAdapter(
             'Account/addSubAccount.json',
@@ -178,7 +178,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
         
-        $subAccount = $this->getEndpoint()->addSubAccount('Sub Account Name', [
+        $subAccount = $this->getEndpoint()->createSubAccount('Sub Account Name', [
             'user_name' => 'John Doe'
         ]);
 
@@ -209,7 +209,7 @@ class AccountTest extends \TestCase implements TestAPI
     // Logs
     //
 
-    public function testSetLogLevel()
+    public function testModifyLogLevel()
     {
         $this->setAdapter(
             'Account/setLogLevel.json',
@@ -220,7 +220,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setLogLevel(12345, 'full');
+        $result = $this->getEndpoint()->modifyLogLevel(12345, 'full');
 
         $this->assertTrue($result);
     }
@@ -277,7 +277,7 @@ class AccountTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testSetAmazonSiemStorage()
+    public function testModifyAmazonSiemStorage()
     {
         $this->setAdapter(
             'Account/setSiemStorage.json',
@@ -290,7 +290,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setAmazomSiemStorage(
+        $result = $this->getEndpoint()->modifyAmazomSiemStorage(
             12345,
             'Test-Bucket-Name',
             'Test-Access-Key',
@@ -300,7 +300,7 @@ class AccountTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testSetSFTPSiemStorage()
+    public function testModifySFTPSiemStorage()
     {
         $this->setAdapter(
             'Account/setSiemStorage.json',
@@ -314,7 +314,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setSFTPSiemStorage(
+        $result = $this->getEndpoint()->modifySFTPSiemStorage(
             12345,
             '1.1.1.1',
             'Test-Username',
@@ -325,7 +325,7 @@ class AccountTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testSetDefaultSiemStorage()
+    public function testModifyDefaultSiemStorage()
     {
         $this->setAdapter(
             'Account/setSiemStorage.json',
@@ -335,7 +335,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setDefaultSiemStorage(12345);
+        $result = $this->getEndpoint()->modifyDefaultSiemStorage(12345);
 
         $this->assertTrue($result);
     }
@@ -355,7 +355,7 @@ class AccountTest extends \TestCase implements TestAPI
         $this->assertEquals('EU', $region);
     }
 
-    public function testSetDefaultStorageRegion()
+    public function testModifyDefaultStorageRegion()
     {
         $this->setAdapter(
             'Account/getDataStorageRegion.json',
@@ -366,7 +366,7 @@ class AccountTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setDefaultStorageRegion(12345, 'EU');
+        $result = $this->getEndpoint()->modifyDefaultStorageRegion(12345, 'EU');
 
         $this->assertTrue($result);
     }

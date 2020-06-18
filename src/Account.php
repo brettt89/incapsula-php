@@ -39,7 +39,7 @@ class Account extends Endpoint
     // @todo Manual Testing required (Account features disabled)
     //
 
-    public function listManagedAccounts(int $account_id = null, array $pagination_options = []): array
+    public function getManagedAccounts(int $account_id = null, array $pagination_options = []): array
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
         $options = array_merge($pagination_options, $options);
@@ -48,7 +48,7 @@ class Account extends Endpoint
         return $this->body->accounts;
     }
 
-    public function addManagedAccount(string $email, array $account_options = []): \stdClass
+    public function createManagedAccount(string $email, array $account_options = []): \stdClass
     {
         $options = array_merge($account_options, ['email' => $email]);
 
@@ -71,7 +71,7 @@ class Account extends Endpoint
     // Manual Testing completed (Success)
     //
 
-    public function listSubAccounts(int $account_id = null, $pagination_options = []): array
+    public function getSubAccounts(int $account_id = null, $pagination_options = []): array
     {
         $options = $account_id !== null ? ['account_id' => $account_id] : [];
         $options = array_merge($pagination_options, $options);
@@ -80,7 +80,7 @@ class Account extends Endpoint
         return $this->body->resultList;
     }
     
-    public function addSubAccount(string $name, array $account_options = []): \stdClass
+    public function createSubAccount(string $name, array $account_options = []): \stdClass
     {
         $options = array_merge($account_options, ['sub_account_name' => $name]);
 
@@ -103,7 +103,7 @@ class Account extends Endpoint
     // @todo Manual Testing required (Feature not enabled)
     //
 
-    public function setLogLevel(int $account_id, string $level): bool
+    public function modifyLogLevel(int $account_id, string $level): bool
     {
         $options = [
             'account_id' => $account_id,
@@ -154,7 +154,7 @@ class Account extends Endpoint
         return $this->body;
     }
 
-    public function setAmazomSiemStorage(
+    public function modifyAmazomSiemStorage(
         int $account_id,
         string $bucket_name,
         string $access_key,
@@ -171,7 +171,7 @@ class Account extends Endpoint
         return $this->body;
     }
 
-    public function setSFTPSiemStorage(
+    public function modifySFTPSiemStorage(
         int $account_id,
         string $host,
         string $user_name,
@@ -190,7 +190,7 @@ class Account extends Endpoint
         return $this->body;
     }
 
-    public function setDefaultSiemStorage(int $account_id): bool
+    public function modifyDefaultSiemStorage(int $account_id): bool
     {
         $options = [
             'account_id' => $account_id
@@ -206,7 +206,7 @@ class Account extends Endpoint
     // Manual Testing completed (Success)
     //
 
-    public function setConfig(int $account_id, string $param, $value): bool
+    public function modifyConfig(int $account_id, string $param, $value): bool
     {
         $options = [
             'account_id' => $account_id,
@@ -228,7 +228,7 @@ class Account extends Endpoint
         return $this->body->region;
     }
 
-    public function setDefaultStorageRegion(int $account_id, string $region): bool
+    public function modifyDefaultStorageRegion(int $account_id, string $region): bool
     {
         $options = [
             'account_id' => $account_id,

@@ -83,7 +83,7 @@ class DDoSProtection extends Endpoint
         return $this->body;
     }
 
-    public function setOriginIP(
+    public function modifyOriginIP(
         string $origin_ip,
         string $edge_ip
     ): \stdClass
@@ -97,7 +97,7 @@ class DDoSProtection extends Endpoint
         return $this->body;
     }
 
-    public function setOriginCNAME(
+    public function modifyOriginCNAME(
         string $origin_ip,
         string $cname
     ): \stdClass
@@ -111,7 +111,7 @@ class DDoSProtection extends Endpoint
         return $this->body;
     }
 
-    public function setOriginDNSIP(
+    public function modifyOriginDNSIP(
         string $origin_ip,
         string $dns_name,
         string $edge_ip,
@@ -129,7 +129,7 @@ class DDoSProtection extends Endpoint
         return $this->body;
     }
 
-    public function setOriginDNSCNAME(
+    public function modifyOriginDNSCNAME(
         string $cname,
         string $dns_name,
         string $edge_ip,
@@ -147,11 +147,22 @@ class DDoSProtection extends Endpoint
         return $this->body;
     }
 
-    public function enableHAProtocol(string $edge_ip, bool $enable_ha_protocol): bool
+    public function enableHAProtocol(string $edge_ip): bool
     {
         $options = [
             'edge_ip' => $edge_ip,
-            'enable_ha_protocol' => $enable_ha_protocol
+            'enable_ha_protocol' => true
+        ];
+
+        $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/ha-protocol', $options);
+        return empty((array) $this->body);
+    }
+
+    public function disableHAProtocol(string $edge_ip): bool
+    {
+        $options = [
+            'edge_ip' => $edge_ip,
+            'enable_ha_protocol' => false
         ];
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/edit/ha-protocol', $options);

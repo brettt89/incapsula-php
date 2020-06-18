@@ -54,7 +54,7 @@ class Caching extends Endpoint
         return $this->body->cache_mode;
     }
 
-    public function setCacheMode(
+    public function modifyCacheMode(
         int $site_id, 
         string $mode,
         string $dyanmic = null,
@@ -86,7 +86,7 @@ class Caching extends Endpoint
         return $this->body->secured_resources_mode;
     }
 
-    public function setSecureResourceMode(int $site_id, string $mode): bool
+    public function modifySecureResourceMode(int $site_id, string $mode): bool
     {
         $options = [
             'site_id' => $site_id,
@@ -107,7 +107,7 @@ class Caching extends Endpoint
         return $this->body;
     }
 
-    public function setStaleContentSettings(
+    public function modifyStaleContentSettings(
         int $site_id,
         bool $serve_stale_content,
         string $stale_content_mode = null,
@@ -143,7 +143,7 @@ class Caching extends Endpoint
         return $this->body;
     }
 
-    public function setCache404Settings(
+    public function modifyCache404Settings(
         int $site_id,
         bool $enable,
         int $time = null,
@@ -192,7 +192,7 @@ class Caching extends Endpoint
         return $this->body->value;
     }
 
-    public function setAdvancedCacheSettings(int $site_id, string $param, $value): bool
+    public function modifyAdvancedCacheSettings(int $site_id, string $param, $value): bool
     {
         $options = [
             'site_id' => $site_id,
@@ -214,7 +214,7 @@ class Caching extends Endpoint
         return $this->body;
     }
 
-    public function setCachedResponseHeaders(
+    public function modifyCachedResponseHeaders(
         int $site_id,
         string $cache_headers,
         bool $cache_all_headers = null
@@ -241,7 +241,7 @@ class Caching extends Endpoint
         return isset($this->body->header) ? $this->body->header : '';
     }
 
-    public function setTagResponseHeader(int $site_id, string $header): bool
+    public function modifyTagResponseHeader(int $site_id, string $header): bool
     {
         $options = [
             'site_id' => $site_id,
@@ -252,11 +252,22 @@ class Caching extends Endpoint
         return empty((array) $this->body);
     }
 
-    public function enableCacheShield(int $site_id, bool $enable): bool
+    public function enableCacheShield(int $site_id): bool
     {
         $options = [
             'site_id' => $site_id,
-            'enable' => $enable
+            'enable' => true
+        ];
+
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/cache-shield/enable', $options);
+        return empty((array) $this->body);
+    }
+
+    public function disableCacheShield(int $site_id): bool
+    {
+        $options = [
+            'site_id' => $site_id,
+            'enable' => false
         ];
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/performance/cache-shield/enable', $options);

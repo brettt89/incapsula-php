@@ -4,5 +4,5 @@ namespace Incapsula\API;
 
 interface Auth
 {
-    public function getRequestParameters(): array;
+    public function toArray();
 }

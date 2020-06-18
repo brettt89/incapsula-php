@@ -6,7 +6,7 @@ use Incapsula\API\Endpoint;
 
 class DataCenters extends Endpoint
 {
-    public function addDataCenter(
+    public function createDataCenter(
         int $site_id,
         string $name,
         string $address,
@@ -38,7 +38,7 @@ class DataCenters extends Endpoint
         return $this->body;
     }
 
-    public function editDataCenter(
+    public function modifyDataCenter(
         int $dc_id,
         array $options = []
     ): \stdClass {
@@ -85,7 +85,7 @@ class DataCenters extends Endpoint
         return $this->body;
     }
 
-    public function editServer(
+    public function modifyServer(
         int $server_id,
         array $options
     ): \stdClass {
@@ -107,7 +107,7 @@ class DataCenters extends Endpoint
         return $this->body;
     }
 
-    public function listDataCenters(int $site_id): \stdClass
+    public function getDataCenters(int $site_id): \stdClass
     {
         $options = [
             'site_id' => $site_id
@@ -117,7 +117,7 @@ class DataCenters extends Endpoint
         return $this->body;
     }
 
-    public function setDataCenterOriginPOP(int $dc_id, string $origin_pop = null): bool
+    public function modifyDataCenterOriginPOP(int $dc_id, string $origin_pop = null): bool
     {
         $options = [
             'dc_id' => $dc_id

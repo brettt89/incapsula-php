@@ -6,7 +6,7 @@ use Incapsula\API\Endpoint;
 
 class Rules extends Endpoint
 {
-    public function addIncapRule(
+    public function createIncapRule(
         int $site_id,
         string $name,
         string $action,
@@ -22,7 +22,7 @@ class Rules extends Endpoint
         return $this->body;
     }
 
-    public function updateIncapRule(
+    public function modifyIncapRule(
         int $rule_id,
         string $action,
         array $rule_options = []
@@ -36,11 +36,22 @@ class Rules extends Endpoint
         return empty((array) $this->body);
     }
 
-    public function enableDisableIncapRule(int $rule_id, bool $enable): bool
+    public function enableIncapRule(int $rule_id): bool
     {
         $options = [
             'rule_id' => $rule_id,
-            'enable' => $enable ? 'true' : 'false'
+            'enable' => 'true'
+        ];
+
+        $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/enableDisable', $options);
+        return empty((array) $this->body);
+    }
+
+    public function disableIncapRule(int $rule_id): bool
+    {
+        $options = [
+            'rule_id' => $rule_id,
+            'enable' => 'false'
         ];
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/enableDisable', $options);
@@ -57,49 +68,32 @@ class Rules extends Endpoint
         return $this->body;
     }
 
-    public function listIncapRules(
+    public function getIncapRules(
         int $site_id,
-        bool $inc_delivery = null,
-        bool $inc_incap = null,
-        array $pagination_options = []
+        array $options = []
     ): \stdClass {
-        $options = array_merge($pagination_options, [
+        $options = array_merge($options, [
             'site_id' => $site_id
         ]);
-
-        if (isset($inc_delivery)) {
-            $options['include_ad_rules'] = $inc_delivery;
-        }
-        if (isset($inc_incap)) {
-            $options['include_incap_rules'] = $inc_incap;
-        }
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/list', $options);
         return $this->body;
     }
 
     // @todo Incapsula Error - Disabled
-    public function listAccountIncapRules(
+    public function getAccountIncapRules(
         int $account_id,
-        bool $inc_delivery = null,
-        bool $inc_incap = null
+        array $options = []
     ): \stdClass {
-        $options = [
+        $options = array_merge($options, [
             'account_id' => $account_id
-        ];
-
-        if (isset($inc_delivery)) {
-            $options['include_ad_rules'] = $inc_delivery;
-        }
-        if (isset($inc_incap)) {
-            $options['include_incap_rules'] = $inc_incap;
-        }
+        ]);
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/incapRules/account/list', $options);
         return $this->body;
     }
 
-    public function setIncapRulePriority(int $rule_id, int $priority): \stdClass
+    public function modifyIncapRulePriority(int $rule_id, int $priority): \stdClass
     {
         $options = [
             'rule_id' => $rule_id,

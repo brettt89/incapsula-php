@@ -8,8 +8,8 @@ class GuzzleTest extends \TestCase
 
     public function setUp(): void
     {
-        $auth = $this->createMock(\Incapsula\API\ApiKey::class, ['getRequestParameters']);
-        $auth->method('getRequestParameters')
+        $auth = $this->createMock(\Incapsula\API\ApiKey::class, ['toArray']);
+        $auth->method('toArray')
             ->willReturn(['X-Testing' => 'Test']);
         
         $this->adapter = new \Incapsula\API\Guzzle($auth);

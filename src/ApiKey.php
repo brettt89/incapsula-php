@@ -15,7 +15,7 @@ class ApiKey implements Auth
         $this->apiKey = $apiKey;
     }
     
-    public function getRequestParameters(): array
+    public function toArray()
     {
         return [
             'api_id'   => $this->apiId,

@@ -16,7 +16,7 @@ class DataCentersTest extends \TestCase implements TestAPI
         return $this->endpoint;
     }
     
-    public function testAddDataCenter()
+    public function testCreateDataCenter()
     {
         $this->setAdapter(
             'success.json',
@@ -32,7 +32,7 @@ class DataCentersTest extends \TestCase implements TestAPI
             ]
         );
 
-        $mode = $this->getEndpoint()->addDataCenter(
+        $mode = $this->getEndpoint()->createDataCenter(
             12345,
             'testName',
             '1.2.3.4',
@@ -45,7 +45,7 @@ class DataCentersTest extends \TestCase implements TestAPI
         $this->assertIsObject($mode);
     }
 
-    public function testEditDataCenter()
+    public function testModifyDataCenter()
     {
         $this->setAdapter(
             'success.json',
@@ -59,7 +59,7 @@ class DataCentersTest extends \TestCase implements TestAPI
             ]
         );
 
-        $mode = $this->getEndpoint()->editDataCenter(
+        $mode = $this->getEndpoint()->modifyDataCenter(
             54321,
             [
                 'name' => 'testName',
@@ -119,7 +119,7 @@ class DataCentersTest extends \TestCase implements TestAPI
         $this->assertIsObject($mode);
     }
 
-    public function testEditServer()
+    public function testModifyServer()
     {
         $this->setAdapter(
             'success.json',
@@ -132,7 +132,7 @@ class DataCentersTest extends \TestCase implements TestAPI
             ]
         );
 
-        $mode = $this->getEndpoint()->editServer(
+        $mode = $this->getEndpoint()->modifyServer(
             98765,
             [
                 'server_address' => '4.3.2.1',
@@ -159,7 +159,7 @@ class DataCentersTest extends \TestCase implements TestAPI
         $this->assertIsObject($mode);
     }
 
-    public function testListDataCenters()
+    public function testGetDataCenters()
     {
         $this->setAdapter(
             'success.json',
@@ -169,12 +169,12 @@ class DataCentersTest extends \TestCase implements TestAPI
             ]
         );
 
-        $mode = $this->getEndpoint()->listDataCenters(12345);
+        $mode = $this->getEndpoint()->getDataCenters(12345);
 
         $this->assertIsObject($mode);
     }
 
-    public function testDataCenterOriginPOP()
+    public function testModifyDataCenterOriginPOP()
     {
         $this->setAdapter(
             'success.json',
@@ -185,7 +185,7 @@ class DataCentersTest extends \TestCase implements TestAPI
             ]
         );
 
-        $mode = $this->getEndpoint()->setDataCenterOriginPOP(54321, 'AP');
+        $mode = $this->getEndpoint()->modifyDataCenterOriginPOP(54321, 'AP');
 
         $this->assertTrue($mode);
     }

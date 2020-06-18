@@ -16,7 +16,7 @@ class CacheRulesTest extends \TestCase implements TestAPI
         return $this->endpoint;
     }
     
-    public function testAddCacheRule()
+    public function testCreateCacheRule()
     {
         $this->setAdapter(
             'Site/Performance/addCacheRule.json',
@@ -31,7 +31,7 @@ class CacheRulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->addCacheRule(12345, 'New Rule', 'HTTP_CACHE_MAKE_STATIC', [
+        $result = $this->getEndpoint()->createCacheRule(12345, 'New Rule', 'HTTP_CACHE_MAKE_STATIC', [
             'ttl' => 10,
             'ttl_unit' => 'MINUTES'
         ]);
@@ -56,7 +56,7 @@ class CacheRulesTest extends \TestCase implements TestAPI
         $this->assertTrue($result);
     }
 
-    public function testSetCacheRule()
+    public function testModifyCacheRule()
     {
         $this->setAdapter(
             'success.json',
@@ -69,7 +69,7 @@ class CacheRulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setCacheRule(12345, 98765, [
+        $result = $this->getEndpoint()->modifyCacheRule(12345, 98765, [
             'ttl' => 10,
             'ttl_unit' => 'MINUTES'
         ]);
@@ -85,16 +85,33 @@ class CacheRulesTest extends \TestCase implements TestAPI
             [
                 'site_id' => 12345,
                 'rule_id' => 98765,
-                'enable' => 'false'
+                'enable' => 'true'
             ]
         );
 
-        $result = $this->getEndpoint()->enableCacheRule(12345, 98765, false);
+        $result = $this->getEndpoint()->enableCacheRule(12345, 98765);
 
         $this->assertTrue($result);
     }
 
-    public function testListCacheRules()
+    public function testDisableCacheRule()
+    {
+        $this->setAdapter(
+            'success.json',
+            '/api/prov/v1/sites/performance/caching-rules/enable',
+            [
+                'site_id' => 12345,
+                'rule_id' => 98765,
+                'enable' => 'false'
+            ]
+        );
+
+        $result = $this->getEndpoint()->disableCacheRule(12345, 98765);
+
+        $this->assertTrue($result);
+    }
+
+    public function testGetCacheRules()
     {
         $this->setAdapter(
             'Site/Performance/listCacheRules.json',
@@ -106,7 +123,7 @@ class CacheRulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->listCacheRules(12345, [
+        $result = $this->getEndpoint()->getCacheRules(12345, [
             'page_size' => 100,
             'page_num' => 2
         ]);

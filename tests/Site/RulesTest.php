@@ -16,7 +16,7 @@ class RulesTest extends \TestCase implements TestAPI
         return $this->endpoint;
     }
     
-    public function testAddIncapRule()
+    public function testCreateIncapRule()
     {
         $this->setAdapter(
             'success.json',
@@ -30,7 +30,7 @@ class RulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->addIncapRule(12345, 'test name', 'RULE_ACTION_REDIRECT', [
+        $result = $this->getEndpoint()->createIncapRule(12345, 'test name', 'RULE_ACTION_REDIRECT', [
             'filter' => 'test Filter',
             'response_code' => 312
         ]);
@@ -38,7 +38,7 @@ class RulesTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testUpdateIncapRule()
+    public function testModifyIncapRule()
     {
         $this->setAdapter(
             'success.json',
@@ -51,7 +51,7 @@ class RulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->updateIncapRule(98765, 'RULE_ACTION_REDIRECT', [
+        $result = $this->getEndpoint()->modifyIncapRule(98765, 'RULE_ACTION_REDIRECT', [
             'filter' => 'test Filter',
             'response_code' => 312
         ]);
@@ -59,7 +59,23 @@ class RulesTest extends \TestCase implements TestAPI
         $this->assertTrue($result);
     }
 
-    public function testEnableDisableIncapRule()
+    public function testEnableIncapRule()
+    {
+        $this->setAdapter(
+            'success.json',
+            '/api/prov/v1/sites/incapRules/enableDisable',
+            [
+                'rule_id' => 98765,
+                'enable' => 'true'
+            ]
+        );
+
+        $result = $this->getEndpoint()->enableIncapRule(98765);
+
+        $this->assertTrue($result);
+    }
+
+    public function testDisableIncapRule()
     {
         $this->setAdapter(
             'success.json',
@@ -70,12 +86,12 @@ class RulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->enableDisableIncapRule(98765, false);
+        $result = $this->getEndpoint()->disableIncapRule(98765);
 
         $this->assertTrue($result);
     }
 
-    public function testDelteIncapRule()
+    public function testDeleteIncapRule()
     {
         $this->setAdapter(
             'success.json',
@@ -90,7 +106,7 @@ class RulesTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testListIncapRules()
+    public function testGetIncapRules()
     {
         $this->setAdapter(
             'Site/listIncapRules.json',
@@ -104,7 +120,9 @@ class RulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->listIncapRules(12345, true, false, [
+        $result = $this->getEndpoint()->getIncapRules(12345, [
+            'include_ad_rules' => true,
+            'include_incap_rules' => false,
             'page_size' => 100,
             'page_num' => 2
         ]);
@@ -112,7 +130,7 @@ class RulesTest extends \TestCase implements TestAPI
         $this->assertIsObject($result);
     }
 
-    public function testListAccountIncapRules()
+    public function testGetAccountIncapRules()
     {
         $this->setAdapter(
             'success.json',
@@ -124,12 +142,15 @@ class RulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->listAccountIncapRules(12345, true, false);
+        $result = $this->getEndpoint()->getAccountIncapRules(12345, [
+            'include_ad_rules' => true,
+            'include_incap_rules' => false
+        ]);
 
         $this->assertIsObject($result);
     }
 
-    public function testSetIncapRulePriority()
+    public function testModifyIncapRulePriority()
     {
         $this->setAdapter(
             'success.json',
@@ -140,7 +161,7 @@ class RulesTest extends \TestCase implements TestAPI
             ]
         );
 
-        $result = $this->getEndpoint()->setIncapRulePriority(98765, 10);
+        $result = $this->getEndpoint()->modifyIncapRulePriority(98765, 10);
 
         $this->assertIsObject($result);
     }
