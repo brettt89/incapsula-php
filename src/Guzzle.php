@@ -13,21 +13,21 @@ class Guzzle implements Adapter
 {
     private $client;
     private $body;
-    private $debug = false;
+
     private $debug_info;
+    private $res;
+    private $res_message;
 
     /**
      * @inheritDoc
      */
-    public function __construct(Auth $auth, string $baseURI = null, bool $debug = false)
+    public function __construct(Auth $auth, string $baseURI = null)
     {
         if ($baseURI === null) {
             $baseURI = 'https://my.incapsula.com/';
         }
 
-        $this->debug = $debug;
-
-        $this->body = $auth->getRequestParameters();
+        $this->body = $auth->toArray();
         $this->client = new Client([
             'base_uri' => $baseURI,
             'Accept' => 'application/json',
@@ -66,10 +66,18 @@ class Guzzle implements Adapter
         
         $object = json_decode($response->getBody());
 
-        // Cleanup
-        if ($this->debug) $this->debugInfo = $object->debug_info;
-        unset($object->res, $object->res_message);
-        unset($object->debug_info);
+        if (isset($object->res)) {
+            $this->res = $object->res;
+            unset($object->res);
+        }
+        if (isset($object->debug_info)) {
+            $this->debugInfo = $object->debug_info;
+            unset($object->debug_info);
+        }
+        if (isset($object->res_message)) {
+            $this->res_message = $object->res_message;
+            unset($object->res_message);
+        }
         
         return $object;
     }
