@@ -221,7 +221,7 @@ class Site extends Endpoint
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/override-by-geo', $options);
         return (
-            isset($this->body->override_site_regions_by_geo) && 
+            isset($this->body->override_site_regions_by_geo) &&
             $this->body->override_site_regions_by_geo == true
         );
     }
@@ -235,7 +235,7 @@ class Site extends Endpoint
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/sites/data-privacy/override-by-geo', $options);
         return (
-            isset($this->body->override_site_regions_by_geo) && 
+            isset($this->body->override_site_regions_by_geo) &&
             $this->body->override_site_regions_by_geo == false
         );
     }
@@ -339,8 +339,7 @@ class Site extends Endpoint
         int $site_id,
         string $rule_id,
         array $options = []
-    )
-    {
+    ) {
         $this->modifyWhitelistConfig($site_id, $rule_id, null, $options);
     }
 

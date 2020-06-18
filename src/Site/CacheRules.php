@@ -5,7 +5,7 @@ namespace Incapsula\API\Site;
 use Incapsula\API\Endpoint;
 
 class CacheRules extends Endpoint
-{   
+{
     public function createCacheRule(int $site_id, string $name, string $action, array $rule_options = []): int
     {
         $options = array_merge($rule_options, [

@@ -4,5 +4,5 @@ namespace Incapsula\API;
 
 interface Auth
 {
-    public function toArray();
+    public function toArray(): array;
 }

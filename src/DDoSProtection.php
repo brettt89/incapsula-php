@@ -11,14 +11,15 @@ class DDoSProtection extends Endpoint
         string $origin_ip,
         bool $enable_ha_protocol = false,
         string $description = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'origin_ip' => $origin_ip,
             'enable_ha_protocol' => $enable_ha_protocol
         ];
 
-        if (isset($description)) $options['description'] = $description;
+        if (isset($description)) {
+            $options['description'] = $description;
+        }
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/ip', $options);
         return $this->body;
@@ -28,14 +29,15 @@ class DDoSProtection extends Endpoint
         string $cname,
         bool $enable_ha_protocol = false,
         string $description = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'cname' => $cname,
             'enable_ha_protocol' => $enable_ha_protocol
         ];
 
-        if (isset($description)) $options['description'] = $description;
+        if (isset($description)) {
+            $options['description'] = $description;
+        }
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/cname', $options);
         return $this->body;
@@ -47,8 +49,7 @@ class DDoSProtection extends Endpoint
         bool $disable_dns_check = true,
         bool $enable_ha_protocol = false,
         string $description = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'dns_name' => $dns_name,
             'origin_ip' => $origin_ip,
@@ -56,7 +57,9 @@ class DDoSProtection extends Endpoint
             'enable_ha_protocol' => $enable_ha_protocol
         ];
 
-        if (isset($description)) $options['description'] = $description;
+        if (isset($description)) {
+            $options['description'] = $description;
+        }
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/dns-with-ip', $options);
         return $this->body;
@@ -68,8 +71,7 @@ class DDoSProtection extends Endpoint
         bool $disable_dns_check = true,
         bool $enable_ha_protocol = false,
         string $description = null
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'dns_name' => $dns_name,
             'cname' => $cname,
@@ -77,7 +79,9 @@ class DDoSProtection extends Endpoint
             'enable_ha_protocol' => $enable_ha_protocol
         ];
 
-        if (isset($description)) $options['description'] = $description;
+        if (isset($description)) {
+            $options['description'] = $description;
+        }
 
         $this->body = $this->getAdapter()->request('/api/prov/v1/ddos-protection/edge-ip/add/dns-with-cname', $options);
         return $this->body;
@@ -86,8 +90,7 @@ class DDoSProtection extends Endpoint
     public function modifyOriginIP(
         string $origin_ip,
         string $edge_ip
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'origin_ip' => $origin_ip,
             'edge_ip' => $edge_ip
@@ -100,8 +103,7 @@ class DDoSProtection extends Endpoint
     public function modifyOriginCNAME(
         string $origin_ip,
         string $cname
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'origin_ip' => $origin_ip,
             'cname' => $cname
@@ -116,8 +118,7 @@ class DDoSProtection extends Endpoint
         string $dns_name,
         string $edge_ip,
         bool $disable_dns_check = true
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'origin_ip' => $origin_ip,
             'dns_name' => $dns_name,
@@ -134,8 +135,7 @@ class DDoSProtection extends Endpoint
         string $dns_name,
         string $edge_ip,
         bool $disable_dns_check = true
-    ): \stdClass
-    {
+    ): \stdClass {
         $options = [
             'cname' => $cname,
             'dns_name' => $dns_name,

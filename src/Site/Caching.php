@@ -55,7 +55,7 @@ class Caching extends Endpoint
     }
 
     public function modifyCacheMode(
-        int $site_id, 
+        int $site_id,
         string $mode,
         string $dyanmic = null,
         string $aggressive = null

@@ -36,23 +36,24 @@ class GuzzleTest extends \TestCase
         $response = $this->adapter->request('/test/uri', ['test' => 'option']);
     }
 
-    public function testIncapsulaException()
+    public function testCheckError()
     {
         $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
         $method = $class->getMethod('checkError');
         $method->setAccessible(true);
 
-        $response = $this->getPsr7JsonResponseForFixture('errorResponse.json');
+        $property_res = $class->getProperty('res');
+        $property_res->setAccessible(true);
+        $property_res->setValue($this->adapter, 1);
 
         $this->expectException(\Incapsula\API\IncapsulaException::class);
-        $method->invokeArgs($this->adapter, [$response]);
-        $response = $this->adapter->getDebugInfo();
+        $method->invoke($this->adapter);
     }
 
-    public function testJSONException()
+    public function testParseResponse()
     {
         $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
-        $method = $class->getMethod('checkError');
+        $method = $class->getMethod('parseResponse');
         $method->setAccessible(true);
 
         $response = $this->getPsr7JsonResponseForFixture('notJson');
