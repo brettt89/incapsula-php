@@ -24,7 +24,7 @@ class GuzzleTest extends \TestCase
                 $this->equalTo('POST'),
                 $this->equalTo('/test/uri'),
                 $this->equalTo([
-                    'json' => [
+                    'form_params' => [
                         'test' => 'option',
                         'X-Testing' => 'Test'
                     ]

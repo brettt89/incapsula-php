@@ -44,7 +44,7 @@ class Guzzle implements Adapter
         $this->setOptions($options);
 
         $response = $this->client->request('POST', $uri, [
-            RequestOptions::JSON => $this->body,
+            'form_params' => $this->body,
         ]);
 
         return $this->parseResponse($response);
