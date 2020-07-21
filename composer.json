@@ -1,6 +1,6 @@
 {
-    "name": "brettt89/incapsula-sdk",
-    "description": "PHP Incapsula SDK for Incapsula API",
+    "name": "brettt89/incapsula-api-php",
+    "description": "PHP library for Incapsula API",
     "type": "library",
     "require": {
         "php": ">=7.1",
