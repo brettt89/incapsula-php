@@ -1,8 +1,8 @@
 <?php
 
-namespace Incapsula\API\Tests;
+namespace Incapsula\API\Test;
 
-use Incapsula\API\Tests\TestAPI;
+use Incapsula\API\Test\TestAPI;
 
 class DDoSProtectionTest extends \TestCase implements TestAPI
 {

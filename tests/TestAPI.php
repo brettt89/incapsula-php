@@ -1,6 +1,6 @@
 <?php
 
-namespace Incapsula\API\Tests;
+namespace Incapsula\API\Test;
 
 use Incapsula\API\API;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Incapsula\API\Tests\Sites;
+namespace Incapsula\API\Test\Sites;
 
-use Incapsula\API\Tests\TestAPI;
+use Incapsula\API\Test\TestAPI;
 
 class CacheRulesTest extends \TestCase implements TestAPI
 {
