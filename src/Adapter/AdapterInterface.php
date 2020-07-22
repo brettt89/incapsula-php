@@ -1,8 +1,8 @@
 <?php
 
-namespace Incapsula\API;
+namespace IncapsulaAPI\Adapter;
 
-interface Adapter
+interface AdapterInterface
 {
     public function request(string $uri, ...$options): \stdClass;
 }

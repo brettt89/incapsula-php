@@ -1,6 +1,6 @@
 <?php
 
-namespace Incapsula\API;
+namespace IncapsulaAPI\Adapter;
 
 class IncapsulaException extends \Exception
 {

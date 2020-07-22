@@ -1,8 +1,8 @@
 <?php
 
-namespace Incapsula\API;
+namespace IncapsulaAPI\Endpoint;
 
-use Incapsula\API\Endpoint;
+use IncapsulaAPI\Endpoint\Endpoint;
 
 class Site extends Endpoint
 {

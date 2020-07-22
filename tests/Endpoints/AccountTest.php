@@ -1,17 +1,17 @@
 <?php
 
-namespace Incapsula\API\Test;
+namespace IncapsulaAPI\Test\Endpoint;
 
-use Incapsula\API\Test\TestAPI;
+use IncapsulaAPI\Test\Endpoint\TestEndpointInterface;
 
-class AccountTest extends \TestCase implements TestAPI
+class AccountTest extends \TestCase implements TestEndpointInterface
 {
     private $endpoint;
 
-    public function getEndpoint(): \Incapsula\API\API
+    public function getEndpoint(): \IncapsulaAPI\Endpoint\EndpointInterface
     {
         if (!isset($this->endpoint)) {
-            $this->endpoint = new \Incapsula\API\Account($this->getAdapter());
+            $this->endpoint = new \IncapsulaAPI\Endpoint\Account($this->getAdapter());
         }
         return $this->endpoint;
     }

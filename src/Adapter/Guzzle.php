@@ -1,14 +1,14 @@
 <?php
 
-namespace Incapsula\API;
+namespace IncapsulaAPI\Adapter;
 
-use Incapsula\API\Adapter;
-use Incapsula\API\Auth;
+use IncapsulaAPI\Adapter\AdapterInterface;
+use IncapsulaAPI\Auth\AuthInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 
-class Guzzle implements Adapter
+class Guzzle implements AdapterInterface
 {
     private $client;
     private $body = [];
@@ -20,7 +20,7 @@ class Guzzle implements Adapter
     /**
      * @inheritDoc
      */
-    public function __construct(Auth $auth, string $baseURI = null)
+    public function __construct(AuthInterface $auth, string $baseURI = null)
     {
         if ($baseURI === null) {
             $baseURI = 'https://my.incapsula.com/';

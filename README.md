@@ -6,37 +6,39 @@
 
 ## Installation
 
-NOTE: This is current in Development. No tagged versions are available at this current point in time. Hopefully we will have enough functionality to tag a release soon.
-
-The recommended way to install this package is via the Packagist Dependency Manager ([brettt89/incapsula-sdk](https://packagist.org/packages/brettt89/incapsula-sdk)).
+The recommended way to install this package is via the Packagist Dependency Manager ([brettt89/incapsula-api-php](https://packagist.org/packages/brettt89/incapsula-api-php)).
 
 ```bash
-$ composer require brettt89/incapsula-sdk dev-master
+$ composer require brettt89/incapsula-api-php
 ```
 
 ## Incapsula API version 1
 
 The Incapsula API can be found [here](https://docs.imperva.com/bundle/cloud-application-security/page/api/api.htm).
-Each API call is provided via a similarly named function within various classes in the **Incapsula\API** namespace:
+Each API call is provided via a similarly named function within various classes in the **IncapsulaAPI** namespace:
 
 - [x] [Account](https://docs.imperva.com/bundle/cloud-application-security/page/api/accounts-api.htm)
 - [x] [Sites](https://docs.imperva.com/bundle/cloud-application-security/page/api/sites-api.htm)
 - [x] [DDoS Protection](https://docs.imperva.com/bundle/cloud-application-security/page/api/ddos-for-networks.htm)
-- [ ] [Traffic Statistics and Details](https://docs.imperva.com/bundle/cloud-application-security/page/api/traffic-api.htm) (coming soon)
-- [ ] [Login Protect](https://docs.imperva.com/bundle/cloud-application-security/page/api/login-protect-api.htm) (coming soon)
-- [ ] [Integration API](https://docs.imperva.com/bundle/cloud-application-security/page/api/integration-api.htm) (coming soon)
-- [ ] [Infrastructure Protection Test Alerts](https://docs.imperva.com/bundle/cloud-application-security/page/api/network-ddos-api.htm) (coming soon)
+- [ ] [Traffic Statistics and Details](https://docs.imperva.com/bundle/cloud-application-security/page/api/traffic-api.htm)
+- [ ] [Login Protect](https://docs.imperva.com/bundle/cloud-application-security/page/api/login-protect-api.htm)
+- [ ] [Integration API](https://docs.imperva.com/bundle/cloud-application-security/page/api/integration-api.htm)
+- [ ] [Infrastructure Protection Test Alerts](https://docs.imperva.com/bundle/cloud-application-security/page/api/network-ddos-api.htm)
 
-Note that this repository is currently under development, additional classes and endpoints being actively added.
+Note that this repository is currently under development, additional endpoints are being actively added.
 
 ## Getting Started
 
 ```php
-$key        = new Incapsula\API\Auth('Api-ID', 'Api-Key');
-$adapter    = new Incapsula\API\Guzzle($key);
-$account    = new Incapsula\API\Account($adapter);
+$key        = new IncapsulaAPI\Auth\ApiKey('Api-ID', 'Api-Key');
+$adapter    = new IncapsulaAPI\Adapter\Guzzle($key);
+$account    = new IncapsulaAPI\Endpoint\Account($adapter);
 
 $account_id = 123456;
     
 print_r($account->getSites($account_id));
 ```
+
+## Contributions
+
+Please submit any contributions as a pull request to the `master` branch.

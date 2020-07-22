@@ -1,6 +1,6 @@
 <?php
 
-namespace Incapsula\API\Test;
+namespace IncapsulaAPI\Test\Adapter;
 
 class GuzzleTest extends \TestCase
 {
@@ -8,11 +8,11 @@ class GuzzleTest extends \TestCase
 
     public function setUp(): void
     {
-        $auth = $this->createMock(\Incapsula\API\ApiKey::class, ['toArray']);
+        $auth = $this->createMock(\IncapsulaAPI\Auth\ApiKey::class, ['toArray']);
         $auth->method('toArray')
             ->willReturn(['X-Testing' => 'Test']);
         
-        $this->adapter = new \Incapsula\API\Guzzle($auth);
+        $this->adapter = new \IncapsulaAPI\Adapter\Guzzle($auth);
     }
 
     public function testRequest()
@@ -38,7 +38,7 @@ class GuzzleTest extends \TestCase
 
     public function testCheckError()
     {
-        $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
+        $class = new \ReflectionClass(\IncapsulaAPI\Adapter\Guzzle::class);
         $method = $class->getMethod('checkError');
         $method->setAccessible(true);
 
@@ -54,25 +54,25 @@ class GuzzleTest extends \TestCase
         $property_debug_info->setAccessible(true);
         $property_debug_info->setValue($this->adapter, ['problem' => 'Test Problem']);
 
-        $this->expectException(\Incapsula\API\IncapsulaException::class);
+        $this->expectException(\IncapsulaAPI\Adapter\IncapsulaException::class);
         $method->invoke($this->adapter);
     }
 
     public function testParseResponseJSONException()
     {
-        $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
+        $class = new \ReflectionClass(\IncapsulaAPI\Adapter\Guzzle::class);
         $method = $class->getMethod('parseResponse');
         $method->setAccessible(true);
 
         $response = $this->getPsr7JsonResponseForFixture('notJson');
 
-        $this->expectException(\Incapsula\API\JSONException::class);
+        $this->expectException(\IncapsulaAPI\Adapter\JSONException::class);
         $method->invokeArgs($this->adapter, [$response]);
     }
 
     public function testParseResponse()
     {
-        $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
+        $class = new \ReflectionClass(\IncapsulaAPI\Adapter\Guzzle::class);
         $method = $class->getMethod('parseResponse');
         $method->setAccessible(true);
 
@@ -86,7 +86,7 @@ class GuzzleTest extends \TestCase
 
     public function testGetDebugInfo()
     {
-        $class = new \ReflectionClass(\Incapsula\API\Guzzle::class);
+        $class = new \ReflectionClass(\IncapsulaAPI\Adapter\Guzzle::class);
         $property = $class->getProperty('debug_info');
         $property->setAccessible(true);
 

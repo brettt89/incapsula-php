@@ -1,17 +1,17 @@
 <?php
 
-namespace Incapsula\API\Test;
+namespace IncapsulaAPI\Test\Endpoint;
 
-use Incapsula\API\Test\TestAPI;
+use IncapsulaAPI\Test\Endpoint\TestEndpointInterface;
 
-class DDoSProtectionTest extends \TestCase implements TestAPI
+class DDoSProtectionTest extends \TestCase implements TestEndpointInterface
 {
     private $endpoint;
 
-    public function getEndpoint(): \Incapsula\API\API
+    public function getEndpoint(): \IncapsulaAPI\Endpoint\EndpointInterface
     {
         if (!isset($this->endpoint)) {
-            $this->endpoint = new \Incapsula\API\DDoSProtection($this->getAdapter());
+            $this->endpoint = new \IncapsulaAPI\Endpoint\DDoSProtection($this->getAdapter());
         }
         return $this->endpoint;
     }

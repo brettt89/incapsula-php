@@ -1,12 +1,12 @@
 <?php
 
-namespace Incapsula\API\Test;
+namespace IncapsulaAPI\Test\Auth;
 
 class ApiKeyTest extends \TestCase
 {
     public function testGetRequestParameters()
     {
-        $auth    = new \Incapsula\API\ApiKey('123456789', 'abcdefghijklymnop-123456789');
+        $auth    = new \IncapsulaAPI\Auth\ApiKey('123456789', 'abcdefghijklymnop-123456789');
         $parameters = $auth->toArray();
 
         $this->assertArrayHasKey('api_id', $parameters);

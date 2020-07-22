@@ -1,8 +1,8 @@
 <?php
 
-namespace Incapsula\API\Site;
+namespace IncapsulaAPI\Endpoint\Site;
 
-use Incapsula\API\Endpoint;
+use IncapsulaAPI\Endpoint\Endpoint;
 
 class DataCenters extends Endpoint
 {

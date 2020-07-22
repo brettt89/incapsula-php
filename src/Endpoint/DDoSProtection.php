@@ -1,8 +1,8 @@
 <?php
 
-namespace Incapsula\API;
+namespace IncapsulaAPI\Endpoint;
 
-use Incapsula\API\Endpoint;
+use IncapsulaAPI\Endpoint\Endpoint;
 
 // @todo - Error from Incapsula - "Operation not allowed"
 class DDoSProtection extends Endpoint

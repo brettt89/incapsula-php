@@ -1,17 +1,17 @@
 <?php
 
-namespace Incapsula\API\Test\Sites;
+namespace IncapsulaAPI\Test\Endpoint\Site;
 
-use Incapsula\API\Test\TestAPI;
+use IncapsulaAPI\Test\Endpoint\TestEndpointInterface;
 
-class CacheRulesTest extends \TestCase implements TestAPI
+class CacheRulesTest extends \TestCase implements TestEndpointInterface
 {
     private $endpoint;
 
-    public function getEndpoint(): \Incapsula\API\API
+    public function getEndpoint(): \IncapsulaAPI\Endpoint\EndpointInterface
     {
         if (!isset($this->endpoint)) {
-            $this->endpoint = new \Incapsula\API\Site\CacheRules($this->getAdapter());
+            $this->endpoint = new \IncapsulaAPI\Endpoint\Site\CacheRules($this->getAdapter());
         }
         return $this->endpoint;
     }

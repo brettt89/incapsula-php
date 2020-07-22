@@ -1,10 +1,10 @@
 <?php
 
-namespace Incapsula\API;
+namespace IncapsulaAPI\Auth;
 
-use Incapsula\API\Auth;
+use IncapsulaAPI\Auth\AuthInterface;
 
-class ApiKey implements Auth
+class ApiKey implements AuthInterface
 {
     private $apiId;
     private $apiKey;

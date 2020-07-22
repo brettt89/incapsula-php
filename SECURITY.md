@@ -2,11 +2,10 @@
 
 ## Supported Versions
 
-This package is currently in-development.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| master  | :white_check_mark: |
+| 1.0.0   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
