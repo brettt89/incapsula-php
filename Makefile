@@ -12,4 +12,4 @@ lint:
 	php $(HERE)/vendor/bin/php-cs-fixer fix --config=$(HERE)/.php_cs --dry-run
 
 test:
-	php $(HERE)/vendor/bin/phpunit --configuration $(HERE)/phpunit.xml
+	composer run-script test
